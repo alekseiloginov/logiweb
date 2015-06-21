@@ -45,3 +45,11 @@ input[type="submit"] {
     color: white;
     cursor: pointer;
 }
+table {
+    border-collapse: collapse;
+}
+table, td, th {
+    margin: 20px auto;
+    padding: 5px;
+    border: 1px solid gray;
+}

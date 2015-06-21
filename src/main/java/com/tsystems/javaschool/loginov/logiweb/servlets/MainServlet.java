@@ -1,6 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.servlets;
 
 import com.tsystems.javaschool.loginov.logiweb.models.Manager;
+import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
@@ -19,14 +20,14 @@ import java.util.List;
  */
 @WebServlet(name = "MainServlet", urlPatterns = {"/Test"})
 public class MainServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    Logger logger = Logger.getLogger(MainServlet.class);
 
     /**
      * Handles POST HTTP methods.
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        SessionFactory sessionFactory = (SessionFactory) getServletContext().getAttribute("AuthDao");
+        SessionFactory sessionFactory = (SessionFactory) getServletContext().getAttribute("SessionFactory");
         Session session = sessionFactory.getCurrentSession();
 
 
