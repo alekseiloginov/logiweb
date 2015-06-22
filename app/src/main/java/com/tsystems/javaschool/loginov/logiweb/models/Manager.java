@@ -44,8 +44,8 @@ public class Manager {
     private Date created_time;
 
     @UpdateTimestamp
-    @Column(name = "modified_time")
-    private Date modified_time;
+    @Column(name = "last_modified_time")
+    private Date last_modified_time;
 
 
     public int getId() {
@@ -88,7 +88,7 @@ public class Manager {
         return created_time;
     }
 
-    public Date getModified_time() {
-        return modified_time;
+    public Date getLast_modified_time() {
+        return last_modified_time;
     }
 }

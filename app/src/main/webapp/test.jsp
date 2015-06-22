@@ -17,7 +17,7 @@
             <td><c:out value="${manager.surname}"></c:out></td>
             <td><c:out value="${manager.email}"></c:out></td>
             <td><c:out value="${manager.created_time}"></c:out></td>
-            <td><c:out value="${manager.modified_time}"></c:out></td></tr>
+            <td><c:out value="${manager.last_modified_time}"></c:out></td></tr>
     </c:forEach>
     </tbody>
 </table>
@@ -35,7 +35,7 @@
             <td><c:out value="${truck.drivable}"></c:out></td>
             <td><c:out value="${truck.location_id}"></c:out></td>
             <td><c:out value="${truck.created_time}"></c:out></td>
-            <td><c:out value="${truck.modified_time}"></c:out></td></tr>
+            <td><c:out value="${truck.last_modified_time}"></c:out></td></tr>
     </c:forEach>
     </tbody>
 </table>

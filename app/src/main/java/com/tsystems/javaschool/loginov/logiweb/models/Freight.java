@@ -25,7 +25,7 @@ public class Freight {
 
     private Date created_time;
 
-    private Date modified_time;
+    private Date last_modified_time;
 
 
 }

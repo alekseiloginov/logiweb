@@ -23,7 +23,7 @@
             <column name="created_time" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="modified_time" type="timestamp">
+            <column name="last_modified_time" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>
