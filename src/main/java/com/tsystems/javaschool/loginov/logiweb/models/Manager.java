@@ -1,5 +1,8 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -37,24 +40,13 @@ public class Manager {
     @Column(name = "password", nullable = false)
     private int password;
 
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "created_time")
+    @CreationTimestamp
+    @Column(name = "created_time")
     private Date created_time;
 
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "modified_time")
+    @UpdateTimestamp
+    @Column(name = "modified_time")
     private Date modified_time;
-
-//    @PrePersist
-//    protected void onCreate() {
-//        modified_time = created_time = new Date();
-//    }
-//
-//    @PreUpdate
-//    protected void onUpdate() {
-//        modified_time = new Date();
-//    }
-
 
 
     public int getId() {

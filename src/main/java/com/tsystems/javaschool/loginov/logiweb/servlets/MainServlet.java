@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +43,40 @@ public class MainServlet extends HttpServlet {
 
 
 
+        // Update
+//        session = sessionFactory.getCurrentSession();
+//        Transaction transaction1 = session.beginTransaction();
+//
+//        Query query1 = session.createQuery("from Manager where name = :name");
+//        query1.setString("name", "Mihail");
+//        List managerList1 = query1.list();
+//
+//        for (Object aManagerList1 : managerList1) {
+//            Manager manager1 = (Manager) aManagerList1;
+//            manager1.setName("Misha");
+//            session.update(manager1);
+//        }
+//
+//        transaction1.commit();
+
+
+        // Delete
+//        session = sessionFactory.getCurrentSession();
+//        Transaction transaction2 = session.beginTransaction();
+//
+//        Query query2 = session.createQuery("from Manager where name = :name");
+//        query2.setString("name", "Aleksei");
+//        List managerList2 = query2.list();
+//
+//        for (Object aManagerList2 : managerList2) {
+//            Manager manager2 = (Manager) aManagerList2;
+//            session.delete(manager2);
+//        }
+//
+//        transaction2.commit();
+
+
+
         session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
 
@@ -58,8 +91,6 @@ public class MainServlet extends HttpServlet {
         Query query = session.createQuery("from Manager");
         List managerList = query.list();
 
-
-
         transaction.commit();
 
         if (!managerList.isEmpty()) {
@@ -70,10 +101,6 @@ public class MainServlet extends HttpServlet {
             resp.sendRedirect("test.jsp");
 
 
-//            req.setAttribute("managerList", managerList);
-//
-//            RequestDispatcher rd = getServletContext().getRequestDispatcher("/test.jsp");
-//            rd.forward(req, resp);
         }
     }
 
