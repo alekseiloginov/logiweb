@@ -17,15 +17,16 @@ public class Truck {
 
     public Truck() {}
 
-    public Truck(String plate_number, int driver_number, int capacity, int drivable) {
+    public Truck(String plate_number, int driver_number, int capacity, int drivable, Location location) {
         this.plate_number = plate_number;
         this.driver_number = driver_number;
         this.capacity = capacity;
         this.drivable = drivable;
+        this.location = location;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
@@ -41,11 +42,6 @@ public class Truck {
     @Column(name = "drivable", nullable = false)
     private int drivable;
 
-    @GeneratedValue(generator="gen")
-    @GenericGenerator(name="gen", strategy="foreign", parameters={@Parameter(name="property", value="location")})
-    @Column(name = "location_id", nullable = false)
-    private int location_id;
-
     @CreationTimestamp
     @Column(name = "created_time")
     private Date created_time;
@@ -54,8 +50,8 @@ public class Truck {
     @Column(name = "last_modified_time")
     private Date last_modified_time;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
 
@@ -93,14 +89,6 @@ public class Truck {
 
     public void setDrivable(int drivable) {
         this.drivable = drivable;
-    }
-
-    public int getLocation_id() {
-        return location_id;
-    }
-
-    public void setLocation_id(int location_id) {
-        this.location_id = location_id;
     }
 
     public Date getCreated_time() {

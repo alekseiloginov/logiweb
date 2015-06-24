@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller class that handles all client requests (and calls appropriate services).
@@ -100,11 +102,25 @@ public class MainServlet extends HttpServlet {
         session = sessionFactory.getCurrentSession();
         Transaction transaction3 = session.beginTransaction();
 
-        Location location = new Location("Moscow");
-        Truck truck = new Truck("AB12345", 2, 500, 1);
+        String city = "Moscow";
+        Location location = new Location(city);
 
-        location.setTruck(truck);
-        truck.setLocation(location);
+        Query locationQuery = session.createQuery("from Location where city = :city");
+        locationQuery.setString("city", city);
+        Location dbLocation = (Location) locationQuery.uniqueResult();
+
+        if (dbLocation == null) {
+            session.save(location);
+            dbLocation = location;
+
+        }
+
+        Truck truck = new Truck("ED57102", 2, 500, 1, dbLocation);
+
+//        Set<Truck> truckSet = new HashSet<>();
+//        truckSet.add(truck);
+//
+//        dbLocation.setTrucks(truckSet);
 
         session.save(truck);
         transaction3.commit();

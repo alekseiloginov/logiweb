@@ -33,7 +33,7 @@
             <td><c:out value="${truck.driver_number}"></c:out></td>
             <td><c:out value="${truck.capacity}"></c:out></td>
             <td><c:out value="${truck.drivable}"></c:out></td>
-            <td><c:out value="${truck.location_id}"></c:out></td>
+            <td><c:out value="${truck.location.city}"></c:out></td>
             <td><c:out value="${truck.created_time}"></c:out></td>
             <td><c:out value="${truck.last_modified_time}"></c:out></td></tr>
     </c:forEach>

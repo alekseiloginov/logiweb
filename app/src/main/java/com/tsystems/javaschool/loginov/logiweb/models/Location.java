@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Simple java bean that will hold location information.
@@ -21,7 +22,7 @@ public class Location {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
@@ -35,10 +36,6 @@ public class Location {
     @UpdateTimestamp
     @Column(name = "last_modified_time")
     private Date last_modified_time;
-
-
-    @OneToOne(mappedBy = "location", cascade = CascadeType.ALL)
-    private Truck truck;
 
 
     public int getId() {
@@ -61,11 +58,9 @@ public class Location {
         return last_modified_time;
     }
 
-    public Truck getTruck() {
-        return truck;
-    }
 
-    public void setTruck(Truck truck) {
-        this.truck = truck;
+    @Override
+    public String toString() {
+        return city;
     }
 }
