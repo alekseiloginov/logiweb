@@ -29,15 +29,13 @@ public class AuthDao {
             configuration.setProperties(properties);
 
             configuration.addAnnotatedClass(Driver.class);
-//            configuration.addAnnotatedClass(DriverStatusChange.class);
-//            configuration.addAnnotatedClass(Freight.class);
+            configuration.addAnnotatedClass(DriverStatusChange.class);
+            configuration.addAnnotatedClass(Freight.class);
             configuration.addAnnotatedClass(Location.class);
             configuration.addAnnotatedClass(Manager.class);
-//            configuration.addAnnotatedClass(Order.class);
-//            configuration.addAnnotatedClass(OrderDriver.class);
-//            configuration.addAnnotatedClass(OrderWaypoint.class);
+            configuration.addAnnotatedClass(Order.class);
             configuration.addAnnotatedClass(Truck.class);
-//            configuration.addAnnotatedClass(Waypoint.class);
+            configuration.addAnnotatedClass(Waypoint.class);
 
             ServiceRegistry serviceRegistry =
                     new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();

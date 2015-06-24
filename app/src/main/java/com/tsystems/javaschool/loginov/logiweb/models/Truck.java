@@ -1,8 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.models;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -50,7 +48,7 @@ public class Truck {
     @Column(name = "last_modified_time")
     private Date last_modified_time;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 

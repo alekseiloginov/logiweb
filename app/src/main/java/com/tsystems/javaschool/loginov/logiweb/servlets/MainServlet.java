@@ -1,9 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.servlets;
 
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
-import com.tsystems.javaschool.loginov.logiweb.models.Location;
-import com.tsystems.javaschool.loginov.logiweb.models.Manager;
-import com.tsystems.javaschool.loginov.logiweb.models.Truck;
+import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
@@ -33,20 +30,6 @@ public class MainServlet extends HttpServlet {
 
         SessionFactory sessionFactory = (SessionFactory) getServletContext().getAttribute("SessionFactory");
         Session session = sessionFactory.getCurrentSession();
-
-
-        String name = req.getParameter("name");
-        String surname = req.getParameter("surname");
-        String email = req.getParameter("email");
-        int password = Integer.parseInt(req.getParameter("password"));
-
-        Manager manager = new Manager(name, surname, email, password);
-
-        session.beginTransaction();
-        session.save(manager);
-        session.getTransaction().commit();
-
-
 
         // Update
 //        session = sessionFactory.getCurrentSession();
@@ -82,8 +65,9 @@ public class MainServlet extends HttpServlet {
 
 
 
-        session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
+        // Fetch using criteria
+//        session = sessionFactory.getCurrentSession();
+//        Transaction transaction = session.beginTransaction();
 
 //        Criteria criteria = session.createCriteria(Manager.class);
 //        criteria.add(Restrictions.eq("email", email))
@@ -91,12 +75,7 @@ public class MainServlet extends HttpServlet {
 //                .setMaxResults(1);
 //        Manager checkedManager = (Manager) criteria.uniqueResult();
 
-
-
-        Query query = session.createQuery("from Manager");
-        List managerList = query.list();
-
-        transaction.commit();
+//        transaction.commit();
 
 
         // Save truck and location data
@@ -121,20 +100,22 @@ public class MainServlet extends HttpServlet {
 //        transaction3.commit();
 
 
-        // Get truck list
-        session = sessionFactory.getCurrentSession();
-        Transaction transaction0 = session.beginTransaction();
 
-        Query query0 = session.createQuery("from Truck");
-        List truckList = query0.list();
+        session.beginTransaction();
 
-        transaction0.commit();
+        // Save manager data
+
+//        String name = req.getParameter("name");
+//        String surname = req.getParameter("surname");
+//        String email = req.getParameter("email");
+//        int password = Integer.parseInt(req.getParameter("password"));
+//
+//        Manager manager = new Manager(name, surname, email, password);
+//
+//        session.save(manager);
 
 
-
-        // Save driver, location and truck data
-        session = sessionFactory.getCurrentSession();
-        Transaction transaction4 = session.beginTransaction();
+        // Save driver data
 
         String city1 = "Moscow";
         Location location1 = new Location(city1);
@@ -147,7 +128,7 @@ public class MainServlet extends HttpServlet {
             dbLocation1 = location1;
         }
 
-        String truck_plate_number = "ED57102";
+        String truck_plate_number = "AB12345";
         Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
         truckQuery.setString("plate_number", truck_plate_number);
         Truck truck = (Truck) truckQuery.uniqueResult();
@@ -155,33 +136,85 @@ public class MainServlet extends HttpServlet {
             // show message "no truck with the entered plate number, add it first"
         }
 
-        Driver driver = new Driver("Vasya", "Pupkin", "abc@abc.com", 1234, 30, "Free", dbLocation1, truck);
+        Driver driver = new Driver("Grisha", "Chichvarkin", "gri@abc.com", 1234, 90, "shift", dbLocation1, truck);
         // check this driver for existence
 
         session.save(driver);
-        transaction4.commit();
 
+
+        // Save driver status changes data
+        DriverStatusChange driverStatusChange = new DriverStatusChange("free", driver);
+        session.save(driverStatusChange);
+
+        // Save freight data
+        Freight freight = new Freight("iphones", 500, "shipped");
+        session.save(freight);
+
+        // Save waypoint data
+        Waypoint waypoint = new Waypoint("unloading", dbLocation1, freight);
+        session.save(waypoint);
+
+
+        // Save order data
+
+        Set<Driver> drivers = new HashSet<>();
+        drivers.add(driver);
+        drivers.add(new Driver("Nasty", "Molodaia", "nasty@abc.com", 1234, 70, "driving", dbLocation1, truck));
+
+        Set<Waypoint> waypoints = new HashSet<>();
+        waypoints.add(waypoint);
+        waypoints.add(new Waypoint("loading", dbLocation1, new Freight("galaxies", 400, "delivered")));
+
+        Order order = new Order(0, truck, drivers, waypoints);
+        session.save(order);
+
+
+        // Fetch transaction
+
+        // Get manager list
+        Query query = session.createQuery("from Manager");
+        List managerList = query.list();
+
+        // Get truck list
+        query = session.createQuery("from Truck");
+        List truckList = query.list();
 
         // Get driver list
-        session = sessionFactory.getCurrentSession();
-        Transaction transaction5 = session.beginTransaction();
+        query = session.createQuery("from Driver");
+        List driverList = query.list();
 
-        Query query9 = session.createQuery("from Driver");
-        List driverList = query9.list();
+        // Get driver status change list
+        query = session.createQuery("from DriverStatusChange");
+        List driverStatusChangeList = query.list();
 
-        transaction5.commit();
+        // Get order list
+        query = session.createQuery("from Order");
+        List orderList = query.list();
+
+        // Get waypoint list
+        query = session.createQuery("from Waypoint");
+        List waypointList = query.list();
+
+        // Get freight list
+        query = session.createQuery("from Freight");
+        List freightList = query.list();
 
 
-        if (!managerList.isEmpty() && !truckList.isEmpty() && !driverList.isEmpty()) {
+        session.getTransaction().commit();
+
+
+        if (!managerList.isEmpty() && !truckList.isEmpty() && !driverList.isEmpty() && !freightList.isEmpty() && !orderList.isEmpty()) {
 
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("managerList", managerList);
             httpSession.setAttribute("truckList", truckList);
             httpSession.setAttribute("driverList", driverList);
+            httpSession.setAttribute("driverStatusChangeList", driverStatusChangeList);
+            httpSession.setAttribute("orderList", orderList);
+            httpSession.setAttribute("waypointList", waypointList);
+            httpSession.setAttribute("freightList", freightList);
 
             resp.sendRedirect("test.jsp");
-
-
         }
     }
 

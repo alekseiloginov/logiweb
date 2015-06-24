@@ -60,5 +60,75 @@
     </tbody>
 </table>
 
+<br/>
+<h2>Driver status change list</h2>
+
+<table>
+    <tbody>
+    <tr><th>Driver</th><th>Status</th><th>Added</th><th>Last modified</th></tr>
+    <c:forEach items="${sessionScope.driverStatusChangeList}" var="driverStatusChange">
+        <tr><td><c:out value="${driverStatusChange.driver.name}"></c:out></td>
+            <td><c:out value="${driverStatusChange.status}"></c:out></td>
+            <td><c:out value="${driverStatusChange.created_time}"></c:out></td>
+            <td><c:out value="${driverStatusChange.last_modified_time}"></c:out></td></tr>
+    </c:forEach>
+    </tbody>
+</table>
+
+<br/>
+<h2>Order list</h2>
+
+<table>
+    <tbody>
+    <tr><th>Truck number</th><th>Drivers</th><th>Waypoints</th><th>Completed</th><th>Added</th><th>Last modified</th></tr>
+    <c:forEach items="${sessionScope.orderList}" var="order">
+        <tr>
+            <td><c:out value="${order.truck.plate_number}"></c:out></td>
+            <td><c:forEach items="${order.drivers}" var="driver">
+                <c:out value="${driver.name}"></c:out>
+            </c:forEach></td>
+            <td><c:forEach items="${order.waypoints}" var="waypoint">
+                <c:out value="${waypoint.location.city}"></c:out>
+            </c:forEach></td>
+            <td><c:out value="${order.completed}"></c:out></td>
+            <td><c:out value="${order.created_time}"></c:out></td>
+            <td><c:out value="${order.last_modified_time}"></c:out></td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
+
+<br/>
+<h2>Waypoint list</h2>
+
+<table>
+    <tbody>
+    <tr><th>Operation</th><th>City</th><th>Freight</th><th>Added</th><th>Last modified</th></tr>
+    <c:forEach items="${sessionScope.waypointList}" var="waypoint">
+        <tr><td><c:out value="${waypoint.operation}"></c:out></td>
+            <td><c:out value="${waypoint.location.city}"></c:out></td>
+            <td><c:out value="${waypoint.freight.name}"></c:out></td>
+            <td><c:out value="${waypoint.created_time}"></c:out></td>
+            <td><c:out value="${waypoint.last_modified_time}"></c:out></td></tr>
+    </c:forEach>
+    </tbody>
+</table>
+
+<br/>
+<h2>Freight list</h2>
+
+<table>
+    <tbody>
+    <tr><th>Name</th><th>Weight</th><th>Status</th><th>Added</th><th>Last modified</th></tr>
+    <c:forEach items="${sessionScope.freightList}" var="freight">
+        <tr><td><c:out value="${freight.name}"></c:out></td>
+            <td><c:out value="${freight.weight}"></c:out></td>
+            <td><c:out value="${freight.status}"></c:out></td>
+            <td><c:out value="${freight.created_time}"></c:out></td>
+            <td><c:out value="${freight.last_modified_time}"></c:out></td></tr>
+    </c:forEach>
+    </tbody>
+</table>
+
 </body>
 </html>
