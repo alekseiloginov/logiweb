@@ -17,7 +17,7 @@ public class Freight {
 
     private int id;
 
-    private String description;
+//    private String name;
 
     private int weight;
 

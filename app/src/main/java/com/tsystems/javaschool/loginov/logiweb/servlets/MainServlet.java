@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.servlets;
 
+import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Location;
 import com.tsystems.javaschool.loginov.logiweb.models.Manager;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
@@ -99,33 +100,25 @@ public class MainServlet extends HttpServlet {
 
 
         // Save truck and location data
-        session = sessionFactory.getCurrentSession();
-        Transaction transaction3 = session.beginTransaction();
-
-        String city = "Moscow";
-        Location location = new Location(city);
-
-        Query locationQuery = session.createQuery("from Location where city = :city");
-        locationQuery.setString("city", city);
-        Location dbLocation = (Location) locationQuery.uniqueResult();
-
-        if (dbLocation == null) {
-            session.save(location);
-            dbLocation = location;
-
-        }
-
-        Truck truck = new Truck("ED57102", 2, 500, 1, dbLocation);
-
-//        Set<Truck> truckSet = new HashSet<>();
-//        truckSet.add(truck);
+//        session = sessionFactory.getCurrentSession();
+//        Transaction transaction3 = session.beginTransaction();
 //
-//        dbLocation.setTrucks(truckSet);
-
-        session.save(truck);
-        transaction3.commit();
-
-
+//        String city = "Moscow";
+//        Location location = new Location(city);
+//
+//        Query locationQuery = session.createQuery("from Location where city = :city");
+//        locationQuery.setString("city", city);
+//        Location dbLocation = (Location) locationQuery.uniqueResult();
+//
+//        if (dbLocation == null) {
+//            session.save(location);
+//            dbLocation = location;
+//        }
+//
+//        Truck truck = new Truck("ED57102", 2, 500, 1, dbLocation);
+//
+//        session.save(truck);
+//        transaction3.commit();
 
 
         // Get truck list
@@ -138,11 +131,53 @@ public class MainServlet extends HttpServlet {
         transaction0.commit();
 
 
-        if (!managerList.isEmpty() && !truckList.isEmpty()) {
+
+        // Save driver, location and truck data
+        session = sessionFactory.getCurrentSession();
+        Transaction transaction4 = session.beginTransaction();
+
+        String city1 = "Moscow";
+        Location location1 = new Location(city1);
+        Query locationQuery1 = session.createQuery("from Location where city = :city");
+        locationQuery1.setString("city", city1);
+        Location dbLocation1 = (Location) locationQuery1.uniqueResult();
+        if (dbLocation1 == null) {
+            // in production perhaps you couldn't add new city, show error message
+            session.save(location1);
+            dbLocation1 = location1;
+        }
+
+        String truck_plate_number = "ED57102";
+        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
+        truckQuery.setString("plate_number", truck_plate_number);
+        Truck truck = (Truck) truckQuery.uniqueResult();
+        if (truck == null) {
+            // show message "no truck with the entered plate number, add it first"
+        }
+
+        Driver driver = new Driver("Vasya", "Pupkin", "abc@abc.com", 1234, 30, "Free", dbLocation1, truck);
+        // check this driver for existence
+
+        session.save(driver);
+        transaction4.commit();
+
+
+        // Get driver list
+        session = sessionFactory.getCurrentSession();
+        Transaction transaction5 = session.beginTransaction();
+
+        Query query9 = session.createQuery("from Driver");
+        List driverList = query9.list();
+
+        transaction5.commit();
+
+
+        if (!managerList.isEmpty() && !truckList.isEmpty() && !driverList.isEmpty()) {
 
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("managerList", managerList);
             httpSession.setAttribute("truckList", truckList);
+            httpSession.setAttribute("driverList", driverList);
 
             resp.sendRedirect("test.jsp");
 

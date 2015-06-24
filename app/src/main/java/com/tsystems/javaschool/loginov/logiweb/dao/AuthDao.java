@@ -28,7 +28,7 @@ public class AuthDao {
             properties.load(AuthDao.class.getResourceAsStream("/db.properties"));
             configuration.setProperties(properties);
 
-//            configuration.addAnnotatedClass(Driver.class);
+            configuration.addAnnotatedClass(Driver.class);
 //            configuration.addAnnotatedClass(DriverStatusChange.class);
 //            configuration.addAnnotatedClass(Freight.class);
             configuration.addAnnotatedClass(Location.class);
