@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Driver login page</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav>
+    <a href="landing.html" title="Go to the welcome page">Home</a>
+</nav>
+<br/>
+<h2>Enter your email and password</h2>
+<form action="AuthService" method="post">
+    <input type="hidden" name="role" value="driver">
+    <input type="text" name="email" placeholder="email"><br>
+    <input type="password" name="password" placeholder="password"><br>
+    <input type="submit" value="Login">
+</form>
+</body>
+</html>

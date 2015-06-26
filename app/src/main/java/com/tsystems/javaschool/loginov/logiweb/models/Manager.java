@@ -15,7 +15,7 @@ public class Manager {
 
     public Manager() {}
 
-    public Manager(String name, String surname, String email, int password) {
+    public Manager(String name, String surname, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -36,8 +36,8 @@ public class Manager {
     @Column(name = "email", nullable = false, length = 255)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private int password;
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
 
     @CreationTimestamp
     @Column(name = "created_time")
@@ -76,11 +76,11 @@ public class Manager {
         this.email = email;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -90,5 +90,18 @@ public class Manager {
 
     public Date getLast_modified_time() {
         return last_modified_time;
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", created_time=" + created_time +
+                ", last_modified_time=" + last_modified_time +
+                '}';
     }
 }

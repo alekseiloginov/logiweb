@@ -22,15 +22,18 @@ public class AppContextListener implements ServletContextListener {
      * Initializes database connection and Log4j configuration when application context is initialized.
      */
     public void contextInitialized(ServletContextEvent sce) {
-        ServletContext context = sce.getServletContext();
-        context.setAttribute("SessionFactory", AuthDao.getSessionFactory());
+        // Initializing hibernate SessionFactory
+        AuthDao.getSessionFactory();
 
+        ServletContext context = sce.getServletContext();
+
+        // Initializing log4j configuration
         String log4jConfig = context.getInitParameter("log4j-config");
         if (log4jConfig == null) {
             System.err.println("No log4j-config init param, initializing log4j with BasicConfigurator");
             BasicConfigurator.configure();
         } else {
-            String webAppPath = context.getRealPath("/");
+            String webAppPath = context.getRealPath("/WEB-INF/classes/");
             String log4jProp = webAppPath + log4jConfig;
             File log4jConfigFile = new File(log4jProp);
             if (log4jConfigFile.exists()) {

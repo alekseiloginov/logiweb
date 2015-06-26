@@ -15,7 +15,7 @@ public class Driver {
 
     public Driver() {}
 
-    public Driver(String name, String surname, String email, int password,
+    public Driver(String name, String surname, String email, String password,
                   int worked_hours, String status, Location location, Truck truck) {
         this.name = name;
         this.surname = surname;
@@ -41,8 +41,8 @@ public class Driver {
     @Column(name = "email", nullable = false, length = 255)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private int password;
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
 
     @Column(name = "worked_hours", nullable = false)
     private int worked_hours;
@@ -99,11 +99,11 @@ public class Driver {
         this.email = email;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -153,5 +153,22 @@ public class Driver {
 
     public void setTruck(Truck truck) {
         this.truck = truck;
+    }
+
+    @Override
+    public String toString() {
+        return "Driver{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", worked_hours=" + worked_hours +
+                ", status='" + status + '\'' +
+                ", created_time=" + created_time +
+                ", last_modified_time=" + last_modified_time +
+                ", location=" + location +
+                ", truck=" + truck +
+                '}';
     }
 }
