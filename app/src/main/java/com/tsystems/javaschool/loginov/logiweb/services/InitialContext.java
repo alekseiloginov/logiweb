@@ -20,6 +20,15 @@ public class InitialContext {
             case "LogoutService":
                 logger.info("Looking up and creating a new LogoutService object");
                 return new LogoutService();
+            case "TruckListService":
+                logger.info("Looking up and creating a new TruckListService object");
+                return new TruckListService();
+            case "DriverListService":
+                logger.info("Looking up and creating a new DriverListService object");
+                return new DriverListService();
+            case "OrderListService":
+                logger.info("Looking up and creating a new OrderListService object");
+                return new OrderListService();
         }
         return null;
     }

@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<br/>
+<nav>
+    <a href="OrderListService" title="Order list">Orders</a>
+</nav>
+<br>
 <%Driver driver = (Driver) session.getAttribute("driver");%>
 <h1>Hello, <%=driver.getName()%>!</h1>
 <p>Your email: <%=driver.getEmail()%></p>

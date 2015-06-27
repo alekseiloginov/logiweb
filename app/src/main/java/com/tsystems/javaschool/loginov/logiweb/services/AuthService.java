@@ -51,7 +51,6 @@ public class AuthService implements Service {
             out.println("</br></br>");
             out.println("<center><font color=red>" + errorMsg + "</font></center>");
 
-            // TODO add Validator implementation, this one doesn't work without any real input provided
             if (role.equals("manager")) {
                 return "/login_manager.html";
             } else {
@@ -78,12 +77,15 @@ public class AuthService implements Service {
             Session session = sessionFactory.getCurrentSession();
             Transaction transaction = session.beginTransaction();
 
-            // TODO Add if session attr = manager else driver (maybe use interface User)
-
             Criteria criteria;
+            HttpSession httpSession = req.getSession();
 
             // Manager db check
             if (role.equals("manager")) {
+
+                // Set "role" session attribute as "manager" to use it later
+                httpSession.setAttribute("role", "manager");
+
                 criteria = session.createCriteria(Manager.class);
                 criteria.add(Restrictions.eq("email", enteredEmail))
                         .add(Restrictions.eq("password", encryptedPassword))
@@ -92,7 +94,7 @@ public class AuthService implements Service {
                 transaction.commit();
 
                 if (manager != null) {
-                    HttpSession httpSession = req.getSession();
+                    httpSession = req.getSession();
                     httpSession.setAttribute("manager", manager);
                     logger.info("Manager found with details: " + manager);
 
@@ -113,6 +115,10 @@ public class AuthService implements Service {
 
             // Driver db check
             } else {
+
+                // Set "role" session attribute as "driver" to use it later
+                httpSession.setAttribute("role", "driver");
+
                 criteria = session.createCriteria(Driver.class);
                 criteria.add(Restrictions.eq("email", enteredEmail))
                         .add(Restrictions.eq("password", encryptedPassword))
@@ -121,7 +127,7 @@ public class AuthService implements Service {
                 transaction.commit();
 
                 if (driver != null) {
-                    HttpSession httpSession = req.getSession();
+                    httpSession = req.getSession();
                     httpSession.setAttribute("driver", driver);
                     logger.info("Driver found with details: " + driver);
 

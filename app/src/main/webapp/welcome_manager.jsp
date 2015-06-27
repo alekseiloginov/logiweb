@@ -6,7 +6,12 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<br/>
+<nav>
+    <a href="TruckListService" title="Truck list">Trucks</a>
+    <a href="DriverListService" title="Driver list">Drivers</a>
+    <a href="OrderListService" title="Order list">Orders</a>
+</nav>
+<br>
 <%Manager manager = (Manager) session.getAttribute("manager");%>
 <h1>Hello, <%=manager.getName()%>!</h1>
 <p>Your email: <%=manager.getEmail()%></p>

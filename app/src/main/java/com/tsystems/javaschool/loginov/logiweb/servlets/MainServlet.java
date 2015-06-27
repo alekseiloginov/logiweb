@@ -22,7 +22,8 @@ import java.util.Set;
 /**
  * Controller class that handles all client requests (and calls appropriate services).
  */
-@WebServlet(name = "MainServlet", urlPatterns = {"/AuthService", "/RegService", "/LogoutService"})
+@WebServlet(name = "MainServlet", urlPatterns = {"/AuthService", "/RegService", "/LogoutService",
+        "/TruckListService", "/DriverListService", "/OrderListService"})
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     Logger logger = Logger.getLogger(MainServlet.class);
@@ -36,7 +37,6 @@ public class MainServlet extends HttpServlet {
         logger.info("Requested Resource: " + uri);
 
         uri = uri.replaceAll("/","");
-        logger.info("Requested Resource: " + uri);
 
         Service service = ServiceLocator.getService(uri);
         resultPage = service.execute(req, resp);
@@ -247,7 +247,17 @@ public class MainServlet extends HttpServlet {
      * Handles GET HTTP methods.
      */
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String resultPage;
+        String uri = req.getRequestURI();
+        logger.info("Requested Resource: " + uri);
 
+        uri = uri.replaceAll("/","");
+
+        Service service = ServiceLocator.getService(uri);
+        resultPage = service.execute(req, resp);
+
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);
+        dispatcher.include(req, resp);
     }
 
 }
