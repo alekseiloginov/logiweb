@@ -6,16 +6,23 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <nav>
     <a href="landing.html" title="Go to the welcome page">Home</a>
+    <button>Fill form</button>
 </nav>
-<br/>
+
+<br>
 <h2>Enter your email and password</h2>
+
 <form action="AuthService" method="post">
     <input type="hidden" name="role" value="driver">
-    <input type="text" name="email" placeholder="email"><br>
-    <input type="password" name="password" placeholder="password"><br>
+    <input id="email" type="text" name="email" placeholder="email"><br>
+    <input id="password" type="password" name="password" placeholder="password"><br>
     <input type="submit" value="Login">
 </form>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/script.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
