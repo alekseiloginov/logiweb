@@ -14,6 +14,19 @@
 </nav>
 
 <br>
+<h2>Add a truck</h2>
+
+<form action="AddTruckService" method="post">
+    <input type="text" name="plate_number" placeholder="plate number"><br>
+    <input type="text" name="driver_number" placeholder="driver number"><br>
+    <input type="text" name="capacity" placeholder="capacity"><br>
+    <input type="text" name="drivable" placeholder="drivable"><br>
+    <input type="text" name="city" placeholder="city"><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<div class="container">
 <h2>Truck list</h2>
 
 <table>
@@ -30,5 +43,15 @@
     </c:forEach>
     </tbody>
 </table>
+</div>
+
+<br>
+<%--<h2>Dynamic truck list</h2>--%>
+
+<div id="truckList">
+</div>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/db_fetch.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

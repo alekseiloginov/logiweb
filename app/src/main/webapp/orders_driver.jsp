@@ -12,6 +12,7 @@
 </nav>
 
 <br>
+<div class="container">
 <h2>Order list</h2>
 
 <table>
@@ -33,6 +34,7 @@
     </c:forEach>
     </tbody>
 </table>
+</div>
 
 </body>
 </html>

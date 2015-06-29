@@ -14,6 +14,7 @@
 </nav>
 
 <br>
+<div class="container">
 <h2>Driver list</h2>
 
 <table>
@@ -32,6 +33,7 @@
     </c:forEach>
     </tbody>
 </table>
+</div>
 
 </body>
 </html>

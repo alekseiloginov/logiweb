@@ -12,6 +12,8 @@
     <a href="OrderListService" title="Order list">Orders</a>
 </nav>
 <br>
+
+<div class="container">
 <%Manager manager = (Manager) session.getAttribute("manager");%>
 <h1>Hello, <%=manager.getName()%>!</h1>
 <p>Your email: <%=manager.getEmail()%></p>
@@ -19,5 +21,7 @@
 <form action="LogoutService" method="post">
     <input type="submit" value="Logout">
 </form>
+
+</div>
 </body>
 </html>

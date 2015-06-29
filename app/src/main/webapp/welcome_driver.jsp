@@ -10,6 +10,8 @@
     <a href="OrderListService" title="Order list">Orders</a>
 </nav>
 <br>
+
+<div class="container">
 <%Driver driver = (Driver) session.getAttribute("driver");%>
 <h1>Hello, <%=driver.getName()%>!</h1>
 <p>Your email: <%=driver.getEmail()%></p>
@@ -17,5 +19,7 @@
 <form action="LogoutService" method="post">
     <input type="submit" value="Logout">
 </form>
+</div>
+
 </body>
 </html>

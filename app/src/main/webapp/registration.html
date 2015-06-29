@@ -12,17 +12,23 @@
     <a href="login_manager.html" title="Go to the manager login page">Log in</a>
     <button>Fill form</button>
 </nav>
-
 <br>
+
+<div class="container">
 <h2>Enter your name, surname, email and password</h2>
 
-<form action="RegService" method="post">
+<form name="regForm" action="RegService" onsubmit="return validateRegForm()" method="post">
     <input id="name" type="text" name="name" placeholder="name"><br>
     <input id="surname" type="text" name="surname" placeholder="surname"><br>
     <input id="email" type="text" name="email" placeholder="email"><br>
     <input id="password" type="password" name="password" placeholder="password"><br>
     <input type="submit" value="Sign-up">
 </form>
+    <div>
+        <p class="error">Error message</p>
+        <p class="success">Success message</p>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/script.js" type="text/javascript" charset="utf-8"></script>
