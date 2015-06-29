@@ -40,9 +40,8 @@ public class DriverListService implements Service {
 
         session.getTransaction().commit();
 
-        HttpSession httpSession = req.getSession();
-        httpSession.setAttribute("driverList", driverList);
+        req.setAttribute("driverList", driverList);
 
-        return "/drivers.jsp";
+        return "/WEB-INF/jsp/manager/drivers.jsp";
     }
 }

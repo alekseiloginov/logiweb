@@ -40,15 +40,15 @@ public class OrderListService implements Service {
 
         session.getTransaction().commit();
 
-        HttpSession httpSession = req.getSession();
-        httpSession.setAttribute("orderList", orderList);
+        req.setAttribute("orderList", orderList);
 
+        HttpSession httpSession = req.getSession();
         String role = (String) httpSession.getAttribute("role");
 
         if (role.equals("manager")) {
-            return "/orders.jsp";
+            return "/WEB-INF/jsp/manager/orders.jsp";
         } else {
-            return "/orders_driver.jsp";
+            return "/WEB-INF/jsp/driver/orders_driver.jsp";
         }
     }
 }

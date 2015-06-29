@@ -3,14 +3,14 @@
 <html>
 <head>
     <title>Trucks</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
 
 <nav>
     <a href="DriverListService" title="Driver list">Drivers</a>
     <a href="OrderListService" title="Order list">Orders</a>
-    <a href="welcome_manager.jsp" title="Welcome page">Home</a>
+    <a href="WelcomePageService" title="Welcome page">Home</a>
 </nav>
 
 <br>
@@ -32,7 +32,7 @@
 <table>
     <tbody>
     <tr><th>Plate number</th><th>Driver number</th><th>Capacity</th><th>Drivable</th><th>Location</th><th>Added</th><th>Last modified</th></tr>
-    <c:forEach items="${sessionScope.truckList}" var="truck">
+    <c:forEach items="${requestScope.truckList}" var="truck">
         <tr><td><c:out value="${truck.plate_number}"></c:out></td>
             <td><c:out value="${truck.driver_number}"></c:out></td>
             <td><c:out value="${truck.capacity}"></c:out></td>
@@ -52,6 +52,6 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/db_fetch.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/db_fetch.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

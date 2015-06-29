@@ -103,7 +103,7 @@ public class AuthService implements Service {
                         httpSession.removeAttribute("from");
                         return from;
                     } else {
-                        return "/welcome_manager.jsp";
+                        return "/WEB-INF/jsp/manager/welcome_manager.jsp";
                     }
                 } else {
                     logger.error("Manager not found with email: " + enteredEmail);
@@ -136,7 +136,7 @@ public class AuthService implements Service {
                         httpSession.removeAttribute("from");
                         return from;
                     } else {
-                        return "/welcome_driver.jsp";
+                        return "/WEB-INF/jsp/driver/welcome_driver.jsp";
                     }
                 } else {
                     logger.error("Driver not found with email: " + enteredEmail);

@@ -23,7 +23,7 @@ import java.util.Set;
  * Controller class that handles all client requests (and calls appropriate services).
  */
 @WebServlet(name = "MainServlet", urlPatterns = {"/AuthService", "/RegService", "/LogoutService",
-        "/TruckListService", "/DriverListService", "/OrderListService"})
+        "/TruckListService", "/DriverListService", "/OrderListService", "/WelcomePageService"})
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     Logger logger = Logger.getLogger(MainServlet.class);

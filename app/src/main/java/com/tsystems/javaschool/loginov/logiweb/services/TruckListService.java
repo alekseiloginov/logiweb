@@ -40,9 +40,8 @@ public class TruckListService implements Service {
 
         session.getTransaction().commit();
 
-        HttpSession httpSession = req.getSession();
-        httpSession.setAttribute("truckList", truckList);
+        req.setAttribute("truckList", truckList);
 
-        return "/trucks.jsp";
+        return "/WEB-INF/jsp/manager/trucks.jsp";
     }
 }

@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Driver welcome page</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
 <nav>

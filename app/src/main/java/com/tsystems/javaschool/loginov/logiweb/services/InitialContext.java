@@ -29,6 +29,9 @@ public class InitialContext {
             case "OrderListService":
                 logger.info("Looking up and creating a new OrderListService object");
                 return new OrderListService();
+            case "WelcomePageService":
+                logger.info("Looking up and creating a new WelcomePageService object");
+                return new WelcomePageService();
         }
         return null;
     }
