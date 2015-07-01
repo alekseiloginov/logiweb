@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.servlets;
 
+import com.tsystems.javaschool.loginov.logiweb.controllers.ControllerLocator;
 import com.tsystems.javaschool.loginov.logiweb.models.*;
 import com.tsystems.javaschool.loginov.logiweb.services.Service;
 import com.tsystems.javaschool.loginov.logiweb.services.ServiceLocator;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -247,14 +249,24 @@ public class MainServlet extends HttpServlet {
      * Handles GET HTTP methods.
      */
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String resultPage;
-        String uri = req.getRequestURI();
-        logger.info("Requested Resource: " + uri);
+        String resultPage = "/landing.html";
+        String uri = req.getRequestURI().replaceAll("/", "");
+        String method = req.getMethod();
+        logger.info("Request: " + method + " " + uri);
 
-        uri = uri.replaceAll("/","");
+        if (uri.equals("TruckListService")) {
+            Map<String, Object> resultMap = ControllerLocator.execute(uri, method);
 
-        Service service = ServiceLocator.getService(uri);
-        resultPage = service.execute(req, resp);
+            if (resultMap != null) {
+                resultPage = (String) resultMap.get("page");
+                Object data = resultMap.get("data");
+                req.setAttribute("data", data);
+            }
+
+        } else {
+            Service service = ServiceLocator.getService(uri);
+            resultPage = service.execute(req, resp);
+        }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);
         dispatcher.include(req, resp);

@@ -1,7 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 /**
- * A single point of contact to get services by JNDI lookup caching the services.
+ * A single point of access to get services by JNDI lookup caching the services.
  */
 public class ServiceLocator {
     private static Cache cache;

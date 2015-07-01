@@ -32,7 +32,7 @@
 <table>
     <tbody>
     <tr><th>Plate number</th><th>Driver number</th><th>Capacity</th><th>Drivable</th><th>Location</th><th>Added</th><th>Last modified</th></tr>
-    <c:forEach items="${requestScope.truckList}" var="truck">
+    <c:forEach items="${requestScope.data}" var="truck">
         <tr><td><c:out value="${truck.plate_number}"></c:out></td>
             <td><c:out value="${truck.driver_number}"></c:out></td>
             <td><c:out value="${truck.capacity}"></c:out></td>
