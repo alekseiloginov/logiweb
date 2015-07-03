@@ -24,8 +24,7 @@ import java.util.Set;
 /**
  * Controller class that handles all client requests (and calls appropriate services).
  */
-@WebServlet(name = "MainServlet", urlPatterns = {"/AuthService", "/RegService", "/LogoutService",
-        "/TruckListService", "/DriverListService", "/OrderListService", "/WelcomePageService"})
+@WebServlet(name = "MainServlet", urlPatterns = {"*.do"})
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     Logger logger = Logger.getLogger(MainServlet.class);
@@ -34,14 +33,31 @@ public class MainServlet extends HttpServlet {
      * Handles POST HTTP methods.
      */
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String resultPage;
-        String uri = req.getRequestURI();
-        logger.info("Requested Resource: " + uri);
+        String resultPage = "/landing.html";
+        String uri = req.getRequestURI().replaceAll("/", "");
+        String method = req.getMethod();
+        logger.info("Request: " + method + " " + uri);
+        Map requestParameters = req.getParameterMap();
+        Map<String, Object> resultMap = new ControllerLocator().execute(uri, method, requestParameters);
 
-        uri = uri.replaceAll("/","");
+        if (resultMap != null) {
+            resultPage = (String) resultMap.get("page");
 
-        Service service = ServiceLocator.getService(uri);
-        resultPage = service.execute(req, resp);
+            if (resultMap.containsKey("data")) {
+                Object data = resultMap.get("data");
+                req.setAttribute("data", data);
+            }
+
+            if (resultMap.containsKey("error")) {
+                Object error = resultMap.get("error");
+                req.setAttribute("error", error);
+            }
+
+            if (resultMap.containsKey("success")) {
+                Object success = resultMap.get("success");
+                req.setAttribute("success", success);
+            }
+        }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);
         dispatcher.include(req, resp);
@@ -254,13 +270,18 @@ public class MainServlet extends HttpServlet {
         String method = req.getMethod();
         logger.info("Request: " + method + " " + uri);
 
-        if (uri.equals("TruckListService")) {
-            Map<String, Object> resultMap = ControllerLocator.execute(uri, method);
+        Map requestParameters = req.getParameterMap();
+
+        if (uri.equals("TruckList.do")) {
+            Map<String, Object> resultMap = new ControllerLocator().execute(uri, method, requestParameters);
 
             if (resultMap != null) {
                 resultPage = (String) resultMap.get("page");
-                Object data = resultMap.get("data");
-                req.setAttribute("data", data);
+
+                if (resultMap.containsKey("data")) {
+                    Object data = resultMap.get("data");
+                    req.setAttribute("data", data);
+                }
             }
 
         } else {

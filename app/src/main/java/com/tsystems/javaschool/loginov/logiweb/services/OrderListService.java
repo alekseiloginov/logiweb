@@ -46,9 +46,9 @@ public class OrderListService implements Service {
         String role = (String) httpSession.getAttribute("role");
 
         if (role.equals("manager")) {
-            return "/WEB-INF/jsp/manager/orders.jsp";
+            return "/WEB-INF/jsp/secure/manager/orders.jsp";
         } else {
-            return "/WEB-INF/jsp/driver/orders_driver.jsp";
+            return "/WEB-INF/jsp/secure/driver/orders_driver.jsp";
         }
     }
 }

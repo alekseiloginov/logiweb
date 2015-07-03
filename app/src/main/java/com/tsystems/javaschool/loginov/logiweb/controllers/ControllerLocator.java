@@ -1,23 +1,29 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.listeners.AppContextListener;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A single point of access to get any controller and returns a corresponding view as a string.
  */
 public class ControllerLocator {
+    static Logger logger = Logger.getLogger(ControllerLocator.class);
 
-    public static Map<String, Object> execute(String requestUri, String requestMethod) {
-        Logger logger = Logger.getLogger(ControllerLocator.class);
+    public Map<String, Object> execute(String requestUri, String requestMethod, Map requestParameters) {
 
-        try {
-            for (Method method : ControllerLocator.class
-                    .getClassLoader()
-                    .loadClass(("com.tsystems.javaschool.loginov.logiweb.controllers.TruckController"))
-                    .getMethods()) {
+
+        // Login or Registration request
+
+        if (requestUri.equals("Login.do") || requestUri.equals("Register.do") || requestUri.equals("Logout.do")) {
+
+            Set<Method> userControllerMethods = AppContextListener.getUserControllerMethods();
+            UserController userController = new UserController();
+
+            for (Method method : userControllerMethods) {
 
                 try {
                     RequestInfo requestInfoAnnotation = method.getAnnotation(RequestInfo.class);
@@ -25,20 +31,37 @@ public class ControllerLocator {
                     if (requestInfoAnnotation.value().equals(requestUri) &&
                         requestInfoAnnotation.method().equalsIgnoreCase(requestMethod)) {
 
-                        logger.info("method to invoke = " + method);
-                        Map<String, Object> response = (Map<String, Object>) method.invoke(null);
-
-                        logger.info("response page = " + response);
-                        return response;
+                        return (Map<String, Object>) method.invoke(userController, requestParameters);
                     }
 
-                } catch (Throwable ex) {
-                    ex.printStackTrace();
+                } catch (Throwable e) {
+                    logger.error("Problem with the annotated method: " + method, e);
                 }
             }
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+
+        // TruckList request
+
+        } else if (requestUri.equals("TruckList.do")) {
+
+            Set<Method> truckControllerMethods = AppContextListener.getTruckControllerMethods();
+            TruckController truckController = new TruckController();
+
+            for (Method method : truckControllerMethods) {
+
+                try {
+                    RequestInfo requestInfoAnnotation = method.getAnnotation(RequestInfo.class);
+
+                    if (requestInfoAnnotation.value().equals(requestUri) &&
+                            requestInfoAnnotation.method().equalsIgnoreCase(requestMethod)) {
+
+                        return (Map<String, Object>) method.invoke(truckController);
+                    }
+
+                } catch (Throwable e) {
+                    logger.error("Problem with the annotated method: " + method, e);
+                }
+            }
         }
 
         return null;

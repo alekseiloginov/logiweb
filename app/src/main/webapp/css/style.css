@@ -31,16 +31,12 @@ a {
 br {
     clear: both;
 }
-h1, p {
-    padding-left: 35px;
-}
-h2, h4 {
-    padding-left: 25px;
+h1, h2, h4, p {
     text-align: center;
 }
 form {
     margin: 50px auto;
-    width: 320px;
+    width: 344px;
     color: steelblue;
 }
 input {
@@ -89,7 +85,15 @@ table, td, th {
     text-align: center;
     color: red;
 }
+.db_error {
+    text-align: center;
+    color: red;
+}
 .success {
+    text-align: center;
+    color: green;
+}
+.db_success {
     text-align: center;
     color: green;
 }

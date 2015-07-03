@@ -34,11 +34,11 @@
             <version>1.2</version>
         </dependency>
 
-        <!-- MySQL driver 5.1.35 -->
+        <!-- MySQL driver 5.1.36 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.35</version>
+            <version>5.1.36</version>
         </dependency>
 
         <!-- HSQLDB driver 2.3.1 -->

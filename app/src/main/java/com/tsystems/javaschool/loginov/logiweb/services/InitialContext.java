@@ -11,12 +11,12 @@ public class InitialContext {
     public Object lookup(String serviceName) {
 
         switch (serviceName) {
-            case "AuthService":
-                logger.info("Looking up and creating a new AuthService object");
-                return new AuthService();
-            case "RegService":
-                logger.info("Looking up and creating a new RegService object");
-                return new RegService();
+//            case "AuthService.do":
+//                logger.info("Looking up and creating a new AuthService object");
+//                return new AuthService();
+//            case "RegService.do":
+//                logger.info("Looking up and creating a new RegService object");
+//                return new RegService();
             case "LogoutService":
                 logger.info("Looking up and creating a new LogoutService object");
                 return new LogoutService();

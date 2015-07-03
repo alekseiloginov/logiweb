@@ -42,6 +42,6 @@ public class DriverListService implements Service {
 
         req.setAttribute("driverList", driverList);
 
-        return "/WEB-INF/jsp/manager/drivers.jsp";
+        return "/WEB-INF/secure/jsp/manager/drivers.jsp";
     }
 }

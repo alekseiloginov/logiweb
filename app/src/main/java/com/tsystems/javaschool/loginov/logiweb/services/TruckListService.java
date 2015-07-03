@@ -16,14 +16,10 @@ import java.util.List;
 /**
  * Fetches all trucks from the database.
  */
-public class TruckListService implements Service {
+public class TruckListService {
     static Logger logger = Logger.getLogger(TruckListService.class);
 
-    public String getName() {
-        return "TruckListService";
-    }
-
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public List execute() {
 
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
@@ -40,8 +36,6 @@ public class TruckListService implements Service {
 
         session.getTransaction().commit();
 
-        req.setAttribute("truckList", truckList);
-
-        return "/WEB-INF/jsp/manager/trucks.jsp";
+        return truckList;
     }
 }

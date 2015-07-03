@@ -24,9 +24,9 @@ public class WelcomePageService implements Service {
         String role = (String) httpSession.getAttribute("role");
 
         if (role.equals("manager")) {
-            return "/WEB-INF/jsp/manager/welcome_manager.jsp";
+            return "/WEB-INF/jsp/secure/manager/welcome_manager.jsp";
         } else {
-            return "/WEB-INF/jsp/driver/welcome_driver.jsp";
+            return "/WEB-INF/jsp/secure/driver/welcome_driver.jsp";
         }
     }
 }
