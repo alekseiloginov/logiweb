@@ -3,40 +3,30 @@
 <html>
 <head>
     <title>Orders</title>
-    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../../css/style.css" />
+    <!-- jTable styles -->
+    <link rel="stylesheet" href="../../../../jtable/themes/metro/lightgray/jtable.min.css" />
 </head>
 <body>
 
 <nav>
-    <a href="TruckListService" title="Truck list">Trucks</a>
-    <a href="DriverListService" title="Driver list">Drivers</a>
-    <a href="WelcomePageService" title="Welcome page">Home</a>
+    <a href="Trucks.do" title="Truck list">Trucks</a>
+    <a href="Drivers.do" title="Driver list">Drivers</a>
+    <a href="Welcome.do" title="Welcome page">Home</a>
 </nav>
+<br><br>
 
-<br>
 <div class="container">
-<h2>Order list</h2>
-
-<table>
-    <tbody>
-    <tr><th>Truck number</th><th>Drivers</th><th>Waypoints</th><th>Completed</th><th>Added</th><th>Last modified</th></tr>
-    <c:forEach items="${requestScope.orderList}" var="order">
-        <tr>
-            <td><c:out value="${order.truck.plate_number}"></c:out></td>
-            <td><c:forEach items="${order.drivers}" var="driver">
-                <c:out value="${driver.name}"></c:out>
-            </c:forEach></td>
-            <td><c:forEach items="${order.waypoints}" var="waypoint">
-                <c:out value="${waypoint.location.city}"></c:out>
-            </c:forEach></td>
-            <td><c:out value="${order.completed}"></c:out></td>
-            <td><c:out value="${order.created_time}"></c:out></td>
-            <td><c:out value="${order.last_modified_time}"></c:out></td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
+    <div id="OrderTableContainer"></div>
 </div>
 
+<!-- jQuery lib -->
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- jQuery UI lib -->
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+<!-- jTable script file -->
+<script src="../../../../jtable/jquery.jtable.min.js" type="text/javascript"></script>
+<!-- My script file -->
+<script src="../../../../js/order_script.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

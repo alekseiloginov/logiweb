@@ -3,55 +3,30 @@
 <html>
 <head>
     <title>Trucks</title>
-    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../../css/style.css" />
+    <!-- jTable styles -->
+    <link rel="stylesheet" href="../../../../jtable/themes/metro/lightgray/jtable.min.css" />
 </head>
 <body>
 
 <nav>
-    <a href="DriverListService" title="Driver list">Drivers</a>
-    <a href="OrderListService" title="Order list">Orders</a>
-    <a href="WelcomePageService" title="Welcome page">Home</a>
+    <a href="Drivers.do" title="Driver list">Drivers</a>
+    <a href="Orders.do" title="Order list">Orders</a>
+    <a href="Welcome.do" title="Welcome page">Home</a>
 </nav>
+<br><br>
 
-<br>
-<h2>Add a truck</h2>
-
-<form action="AddTruckService" method="post">
-    <input type="text" name="plate_number" placeholder="plate number"><br>
-    <input type="text" name="driver_number" placeholder="driver number"><br>
-    <input type="text" name="capacity" placeholder="capacity"><br>
-    <input type="text" name="drivable" placeholder="drivable"><br>
-    <input type="text" name="city" placeholder="city"><br>
-    <input type="submit" value="Submit">
-</form>
-
-<br>
 <div class="container">
-<h2>Truck list</h2>
-
-<table>
-    <tbody>
-    <tr><th>Plate number</th><th>Driver number</th><th>Capacity</th><th>Drivable</th><th>Location</th><th>Added</th><th>Last modified</th></tr>
-    <c:forEach items="${requestScope.data}" var="truck">
-        <tr><td><c:out value="${truck.plate_number}"></c:out></td>
-            <td><c:out value="${truck.driver_number}"></c:out></td>
-            <td><c:out value="${truck.capacity}"></c:out></td>
-            <td><c:out value="${truck.drivable}"></c:out></td>
-            <td><c:out value="${truck.location.city}"></c:out></td>
-            <td><c:out value="${truck.created_time}"></c:out></td>
-            <td><c:out value="${truck.last_modified_time}"></c:out></td></tr>
-    </c:forEach>
-    </tbody>
-</table>
+    <div id="TruckTableContainer"></div>
 </div>
 
-<br>
-<%--<h2>Dynamic truck list</h2>--%>
-
-<div id="truckList">
-</div>
-
+<!-- jQuery lib -->
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../../js/db_fetch.js" type="text/javascript" charset="utf-8"></script>
+<!-- jQuery UI lib -->
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+<!-- jTable script file -->
+<script src="../../../../jtable/jquery.jtable.min.js" type="text/javascript"></script>
+<!-- My script file -->
+<script src="../../../../js/truck_script.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

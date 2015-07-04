@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Drivers</title>
+    <title>Orders</title>
     <link rel="stylesheet" href="../../../../css/style.css" />
     <!-- jTable styles -->
     <link rel="stylesheet" href="../../../../jtable/themes/metro/lightgray/jtable.min.css" />
@@ -10,14 +10,12 @@
 <body>
 
 <nav>
-    <a href="Trucks.do" title="Truck list">Trucks</a>
-    <a href="Orders.do" title="Order list">Orders</a>
     <a href="Welcome.do" title="Welcome page">Home</a>
 </nav>
 <br><br>
 
 <div class="container">
-    <div id="DriverTableContainer"></div>
+    <div id="OrderTableContainer"></div>
 </div>
 
 <!-- jQuery lib -->
@@ -27,6 +25,6 @@
 <!-- jTable script file -->
 <script src="../../../../jtable/jquery.jtable.min.js" type="text/javascript"></script>
 <!-- My script file -->
-<script src="../../../../js/driver_script.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/order_script.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

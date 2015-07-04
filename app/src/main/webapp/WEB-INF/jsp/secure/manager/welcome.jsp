@@ -7,9 +7,9 @@
 </head>
 <body>
 <nav>
-    <a href="TruckList.do" title="Truck list">Trucks</a>
-    <a href="DriverListService" title="Driver list">Drivers</a>
-    <a href="OrderListService" title="Order list">Orders</a>
+    <a href="Trucks.do" title="Truck list">Trucks</a>
+    <a href="Drivers.do" title="Driver list">Drivers</a>
+    <a href="Orders.do" title="Order list">Orders</a>
 </nav>
 <br>
 

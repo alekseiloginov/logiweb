@@ -7,7 +7,7 @@
 </head>
 <body>
 <nav>
-    <a href="OrderListService" title="Order list">Orders</a>
+    <a href="Orders.do" title="Order list">Orders</a>
 </nav>
 <br>
 

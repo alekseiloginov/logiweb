@@ -46,9 +46,9 @@ public class UserController {
             response.put("user", user);
 
             if (role.equals("manager")) {
-                response.put("page", "/WEB-INF/jsp/secure/manager/welcome_manager.jsp");
+                response.put("page", "/WEB-INF/jsp/secure/manager/welcome.jsp");
             } else {
-                response.put("page", "/WEB-INF/jsp/secure/driver/welcome_driver.jsp");
+                response.put("page", "/WEB-INF/jsp/secure/driver/welcome.jsp");
             }
 
         } catch (UserNotFoundException e) {
@@ -100,6 +100,24 @@ public class UserController {
         }
 
         return response;
+    }
 
+    /**
+     * Redirects authorized user to his welcome page.
+     */
+    @RequestInfo(value = "Welcome.do", method = "GET")
+    public Map<String, Object> redirectToWelcomePage(Map requestParameters) {
+//        String role = ((String[]) requestParameters.get("role"))[0];
+        Map<String, Object> response = new HashMap<>();
+
+        String role = "manager"; // TODO add and check the hidden field from the redirected page via POST method
+
+        if (role.equals("manager")) {
+            response.put("page", "/WEB-INF/jsp/secure/manager/welcome.jsp");
+        } else {
+            response.put("page", "/WEB-INF/jsp/secure/driver/welcome.jsp");
+        }
+
+        return response;
     }
 }
