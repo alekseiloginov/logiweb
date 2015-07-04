@@ -14,11 +14,11 @@
 <br>
 
 <div class="container">
-<%Manager manager = (Manager) request.getAttribute("data");%>
+<%Manager manager = (Manager) session.getAttribute("user");%>
 <h1>Hello, <%=manager.getName()%>!</h1>
 <p>Your email: <%=manager.getEmail()%></p>
 
-<form action="LogoutService" method="post">
+<form action="Logout" method="post">
     <input type="submit" value="Logout">
 </form>
 

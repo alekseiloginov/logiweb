@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import java.security.MessageDigest;
@@ -23,7 +22,17 @@ import java.security.NoSuchAlgorithmException;
 public class AuthService {
     static Logger logger = Logger.getLogger(AuthService.class);
 
-    public Object execute(String email, String password, String role) throws UserNotFoundException, PasswordIncorrectException {
+    public static final AuthService INSTANCE = new AuthService();
+
+    private AuthService() {
+        if (AuthService.INSTANCE != null) throw new InstantiationError("Creating of this object is not allowed.");
+    }
+
+    public static AuthService getInstance() { return INSTANCE; }
+
+    public Object authenticate(String email, String password, String role)
+            throws UserNotFoundException, PasswordIncorrectException {
+
         String encryptedPassword = null;
         logger.info("User's role is: " + role);
 

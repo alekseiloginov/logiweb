@@ -12,19 +12,28 @@ import java.util.Map;
  */
 public class TruckController {
     static Logger logger = Logger.getLogger(TruckController.class);
-    private Map<String, Object> response;
+    private TruckListService truckListService;
+
+    public static final TruckController INSTANCE = new TruckController();
+
+    private TruckController() {
+        if (TruckController.INSTANCE != null) throw new InstantiationError("Creating of this object is not allowed.");
+        truckListService = TruckListService.getInstance();
+    }
+
+    public static TruckController getInstance() { return INSTANCE; }
 
     /**
      * Fetches all trucks from the TruckListService and puts them with the page to view to the response map.
      */
     @RequestInfo(value = "TruckList.do", method = "GET")
-    public Map<String, Object> getAllTrucks() {
-        response = new HashMap<>();
+    public Map<String, Object> getAllTrucks(Map requestParameters) {
+        Map<String, Object> response = new HashMap<>();
 
-        List truckList = new TruckListService().execute();
+        List truckList = truckListService.getAllTrucks();
 
         response.put("data", truckList);
-        response.put("page", "/WEB-INF/secure/jsp/manager/trucks.jsp");
+        response.put("page", "/WEB-INF/jsp/secure/manager/trucks.jsp");
 
         return response;
     }

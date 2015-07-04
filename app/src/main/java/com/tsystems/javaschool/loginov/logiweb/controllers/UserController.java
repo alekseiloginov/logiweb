@@ -15,7 +15,18 @@ import java.util.Map;
  */
 public class UserController {
     static Logger logger = Logger.getLogger(UserController.class);
-    private Map<String, Object> response;
+    private AuthService authService;
+    private RegService regService;
+
+    public static final UserController INSTANCE = new UserController();
+
+    private UserController() {
+        if (UserController.INSTANCE != null) throw new InstantiationError("Creating of this object is not allowed.");
+        authService = AuthService.getInstance();
+        regService = RegService.getInstance();
+    }
+
+    public static UserController getInstance() { return INSTANCE; }
 
     /**
      * Validates user's log in input via AuthService, catches any exceptions
@@ -26,15 +37,13 @@ public class UserController {
         String email = ((String[]) requestParameters.get("email"))[0];
         String password = ((String[]) requestParameters.get("password"))[0];
         String role = ((String[]) requestParameters.get("role"))[0];
-        response = new HashMap<>();
-
+        Map<String, Object> response = new HashMap<>();
         logger.info("Fetching user with the email: " + email + ", role: " + role);
-
         Object user;
 
         try {
-            user = new AuthService().execute(email, password, role);
-            response.put("data", user);
+            user = authService.authenticate(email, password, role);
+            response.put("user", user);
 
             if (role.equals("manager")) {
                 response.put("page", "/WEB-INF/jsp/secure/manager/welcome_manager.jsp");
@@ -62,25 +71,6 @@ public class UserController {
                 response.put("page", "/login_driver.jsp");
             }
         }
-
-
-        // From redirection using filter settings
-//        if (httpSession.getAttribute("from") != null) {
-//            String from = (String) httpSession.getAttribute("from");
-//            httpSession.removeAttribute("from");
-//            return from;
-//        } else {
-//            return "/WEB-INF/jsp/manager/welcome_manager.jsp";
-//        }
-
-//        if (httpSession.getAttribute("from") != null) {
-//            String from = (String) httpSession.getAttribute("from");
-//            httpSession.removeAttribute("from");
-//            return from;
-//        } else {
-//            return "/WEB-INF/jsp/driver/welcome_driver.jsp";
-//        }
-
         return response;
     }
 
@@ -94,12 +84,12 @@ public class UserController {
         String surname = ((String[]) requestParameters.get("surname"))[0];
         String email = ((String[]) requestParameters.get("email"))[0];
         String password = ((String[]) requestParameters.get("password"))[0];
-        response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
         logger.info("Saving manager with the name: " + name + ", surname: " + surname + ", email: " + email);
 
         try {
-            new RegService().execute(name, surname, email, password);
+            regService.register(name, surname, email, password);
             response.put("success", "Registration successful!");
             response.put("page", "/login_manager.jsp");
 

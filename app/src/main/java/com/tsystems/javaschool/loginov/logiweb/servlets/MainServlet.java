@@ -1,12 +1,9 @@
 package com.tsystems.javaschool.loginov.logiweb.servlets;
 
 import com.tsystems.javaschool.loginov.logiweb.controllers.ControllerLocator;
-import com.tsystems.javaschool.loginov.logiweb.models.*;
 import com.tsystems.javaschool.loginov.logiweb.services.Service;
 import com.tsystems.javaschool.loginov.logiweb.services.ServiceLocator;
 import org.apache.log4j.Logger;
-import org.hibernate.*;
-import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,10 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Controller class that handles all client requests (and calls appropriate services).
@@ -28,6 +22,7 @@ import java.util.Set;
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     Logger logger = Logger.getLogger(MainServlet.class);
+    ControllerLocator controllerLocator = ControllerLocator.getInstance();
 
     /**
      * Handles POST HTTP methods.
@@ -38,10 +33,17 @@ public class MainServlet extends HttpServlet {
         String method = req.getMethod();
         logger.info("Request: " + method + " " + uri);
         Map requestParameters = req.getParameterMap();
-        Map<String, Object> resultMap = new ControllerLocator().execute(uri, method, requestParameters);
+        HttpSession session = req.getSession(false);
+
+        Map<String, Object> resultMap = controllerLocator.execute(this, uri, method, requestParameters);
 
         if (resultMap != null) {
             resultPage = (String) resultMap.get("page");
+
+            if (resultMap.containsKey("user")) {
+                Object user = resultMap.get("user");
+                session.setAttribute("user", user);
+            }
 
             if (resultMap.containsKey("data")) {
                 Object data = resultMap.get("data");
@@ -57,6 +59,12 @@ public class MainServlet extends HttpServlet {
                 Object success = resultMap.get("success");
                 req.setAttribute("success", success);
             }
+        }
+
+        // Handle the case when user needs to be redirected to the requested page after login
+        if (session != null && session.getAttribute("user") != null && session.getAttribute("from") != null) {
+            resultPage = (String) session.getAttribute("from");
+            session.removeAttribute("from");
         }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);
@@ -272,21 +280,15 @@ public class MainServlet extends HttpServlet {
 
         Map requestParameters = req.getParameterMap();
 
-        if (uri.equals("TruckList.do")) {
-            Map<String, Object> resultMap = new ControllerLocator().execute(uri, method, requestParameters);
+        Map<String, Object> resultMap = controllerLocator.execute(this, uri, method, requestParameters);
 
-            if (resultMap != null) {
-                resultPage = (String) resultMap.get("page");
+        if (resultMap != null) {
+            resultPage = (String) resultMap.get("page");
 
-                if (resultMap.containsKey("data")) {
-                    Object data = resultMap.get("data");
-                    req.setAttribute("data", data);
-                }
+            if (resultMap.containsKey("data")) {
+                Object data = resultMap.get("data");
+                req.setAttribute("data", data);
             }
-
-        } else {
-            Service service = ServiceLocator.getService(uri);
-            resultPage = service.execute(req, resp);
         }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);

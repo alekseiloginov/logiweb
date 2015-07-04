@@ -1,11 +1,12 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.listeners.AppContextListener;
+import com.tsystems.javaschool.loginov.logiweb.services.AuthService;
+import com.tsystems.javaschool.loginov.logiweb.services.RegService;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServlet;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * A single point of access to get any controller and returns a corresponding view as a string.
@@ -13,55 +14,43 @@ import java.util.Set;
 public class ControllerLocator {
     static Logger logger = Logger.getLogger(ControllerLocator.class);
 
-    public Map<String, Object> execute(String requestUri, String requestMethod, Map requestParameters) {
+    public static final ControllerLocator INSTANCE = new ControllerLocator();
 
+    private ControllerLocator() {
+        if (ControllerLocator.INSTANCE != null) throw new InstantiationError("Creating of this object is not allowed.");
+    }
 
-        // Login or Registration request
+    public static ControllerLocator getInstance() { return INSTANCE; }
 
-        if (requestUri.equals("Login.do") || requestUri.equals("Register.do") || requestUri.equals("Logout.do")) {
+    /**
+     * Invokes a method mapped to the given URI using reflexion, returns a result map or throws an exception.
+     */
+    public Map<String, Object> execute(HttpServlet httpServlet, String requestUri, String requestMethod,
+                                       Map requestParameters) {
 
-            Set<Method> userControllerMethods = AppContextListener.getUserControllerMethods();
-            UserController userController = new UserController();
+        @SuppressWarnings("unchecked")
+        Map<String, Method> mappedMethods =
+                (Map<String, Method>) httpServlet.getServletContext().getAttribute("mappedMethods");
+        Method methodToInvoke = mappedMethods.get(requestUri);
 
-            for (Method method : userControllerMethods) {
+        try {
+            // if an annotated HTTP method equals to the request HTTP method
+            if (methodToInvoke.getAnnotation(RequestInfo.class).method().equalsIgnoreCase(requestMethod)) {
+                logger.info("Method to invoke: " + methodToInvoke);
 
-                try {
-                    RequestInfo requestInfoAnnotation = method.getAnnotation(RequestInfo.class);
+                // Create a singleton controller instance
+                Method getInstance = methodToInvoke.getDeclaringClass().getMethod("getInstance");
+                Object classInstance = getInstance.invoke(null);
+                logger.info("Class instance for the method to invoke: " + classInstance);
 
-                    if (requestInfoAnnotation.value().equals(requestUri) &&
-                        requestInfoAnnotation.method().equalsIgnoreCase(requestMethod)) {
-
-                        return (Map<String, Object>) method.invoke(userController, requestParameters);
-                    }
-
-                } catch (Throwable e) {
-                    logger.error("Problem with the annotated method: " + method, e);
-                }
+                @SuppressWarnings("unchecked")
+                Map<String, Object> result =
+                        (Map<String, Object>) methodToInvoke.invoke(classInstance, requestParameters);
+                return result;
             }
 
-
-        // TruckList request
-
-        } else if (requestUri.equals("TruckList.do")) {
-
-            Set<Method> truckControllerMethods = AppContextListener.getTruckControllerMethods();
-            TruckController truckController = new TruckController();
-
-            for (Method method : truckControllerMethods) {
-
-                try {
-                    RequestInfo requestInfoAnnotation = method.getAnnotation(RequestInfo.class);
-
-                    if (requestInfoAnnotation.value().equals(requestUri) &&
-                            requestInfoAnnotation.method().equalsIgnoreCase(requestMethod)) {
-
-                        return (Map<String, Object>) method.invoke(truckController);
-                    }
-
-                } catch (Throwable e) {
-                    logger.error("Problem with the annotated method: " + method, e);
-                }
-            }
+        } catch (Throwable e) {
+            logger.error("Problem with the annotated method: " + methodToInvoke, e);
         }
 
         return null;

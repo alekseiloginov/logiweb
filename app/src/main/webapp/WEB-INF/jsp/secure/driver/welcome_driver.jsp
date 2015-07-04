@@ -12,11 +12,11 @@
 <br>
 
 <div class="container">
-<%Driver driver = (Driver) session.getAttribute("driver");%>
+<%Driver driver = (Driver) session.getAttribute("user");%>
 <h1>Hello, <%=driver.getName()%>!</h1>
 <p>Your email: <%=driver.getEmail()%></p>
 
-<form action="LogoutService" method="post">
+<form action="Logout" method="post">
     <input type="submit" value="Logout">
 </form>
 </div>
