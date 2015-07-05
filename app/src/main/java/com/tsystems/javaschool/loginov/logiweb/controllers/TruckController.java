@@ -1,7 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.models.Location;
-import com.tsystems.javaschool.loginov.logiweb.models.Truck;
+import com.tsystems.javaschool.loginov.logiweb.services.DeleteService;
 import com.tsystems.javaschool.loginov.logiweb.services.ListService;
 import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
 import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
@@ -19,6 +18,7 @@ public class TruckController {
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;
+    private DeleteService deleteService;
 
     public static final TruckController INSTANCE = new TruckController();
 
@@ -27,6 +27,7 @@ public class TruckController {
         listService = ListService.getInstance();
         saveService = SaveService.getInstance();
         updateService = UpdateService.getInstance();
+        deleteService = DeleteService.getInstance();
     }
 
     public static TruckController getInstance() { return INSTANCE; }
@@ -88,6 +89,20 @@ public class TruckController {
         Map<String, Object> response = new HashMap<>();
 
         updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
+
+        response.put("OK", "OK");
+        return response;
+    }
+
+    /**
+     * Deletes a truck from the database using the DeleteService and puts "OK" back to the response map.
+     */
+    @RequestInfo(value = "TruckDelete.do", method = "POST")
+    public Map<String, Object> deleteTruck(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        Map<String, Object> response = new HashMap<>();
+
+        deleteService.deleteItem("Truck", id);
 
         response.put("OK", "OK");
         return response;

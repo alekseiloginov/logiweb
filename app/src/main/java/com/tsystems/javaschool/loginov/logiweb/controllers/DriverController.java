@@ -1,8 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
-import com.tsystems.javaschool.loginov.logiweb.models.Location;
-import com.tsystems.javaschool.loginov.logiweb.models.Truck;
+import com.tsystems.javaschool.loginov.logiweb.services.DeleteService;
 import com.tsystems.javaschool.loginov.logiweb.services.ListService;
 import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
 import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
@@ -20,6 +18,7 @@ public class DriverController {
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;
+    private DeleteService deleteService;
 
     public static final DriverController INSTANCE = new DriverController();
 
@@ -28,6 +27,7 @@ public class DriverController {
         listService = ListService.getInstance();
         saveService = SaveService.getInstance();
         updateService = UpdateService.getInstance();
+        deleteService = DeleteService.getInstance();
     }
 
     public static DriverController getInstance() { return INSTANCE; }
@@ -96,6 +96,20 @@ public class DriverController {
         Map<String, Object> response = new HashMap<>();
 
         updateService.updateDriver(id, name, surname, email, password, worked_hours, status, city, plate_number);
+
+        response.put("OK", "OK");
+        return response;
+    }
+
+    /**
+     * Deletes a driver from the database using the DeleteService and puts "OK" back to the response map.
+     */
+    @RequestInfo(value = "DriverDelete.do", method = "POST")
+    public Map<String, Object> deleteDriver(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        Map<String, Object> response = new HashMap<>();
+
+        deleteService.deleteItem("Driver", id);
 
         response.put("OK", "OK");
         return response;

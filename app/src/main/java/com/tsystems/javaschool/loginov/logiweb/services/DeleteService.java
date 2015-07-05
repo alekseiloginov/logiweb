@@ -1,13 +1,16 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
- * Deletes an item (truck, driver, orders etc.) in the database.
+ * Deletes an item (truck, driver, orders etc.) from the database.
  */
 public class DeleteService {
+    static Logger logger = Logger.getLogger(DeleteService.class);
 
     public static final DeleteService INSTANCE = new DeleteService();
 
@@ -17,23 +20,22 @@ public class DeleteService {
 
     public static DeleteService getInstance() { return INSTANCE; }
 
-    public Object deleteItem(Object item) {
+    /**
+     * Deletes a provided item with the given ID from the database.
+     */
+    public void deleteItem(String item, int id) {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
-        // Delete
-//
-//        Query query2 = session.createQuery("from Manager where name = :name");
-//        query2.setString("name", "Aleksei");
-//        List managerList2 = query2.list();
-//
-//        for (Object aManagerList2 : managerList2) {
-//            Manager manager2 = (Manager) aManagerList2;
-//            session.delete(manager2);
-//        }
+        Query query = session.createQuery("from " + item + " where id = :id");
+        query.setInteger("id", id);
+        Object itemToDelete = query.uniqueResult();
+        logger.info(item + " to delete: " + itemToDelete);
+
+        session.delete(itemToDelete);
+        logger.info(item + " with ID: " + id + " successfully deleted!");
 
         session.getTransaction().commit();
-        return item;
     }
 }

@@ -1,6 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
 import com.tsystems.javaschool.loginov.logiweb.models.*;
+import com.tsystems.javaschool.loginov.logiweb.services.DeleteService;
 import com.tsystems.javaschool.loginov.logiweb.services.ListService;
 import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
 import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
@@ -19,6 +20,7 @@ public class OrderController {
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;
+    private DeleteService deleteService;
 
     public static final OrderController INSTANCE = new OrderController();
 
@@ -27,6 +29,7 @@ public class OrderController {
         listService = ListService.getInstance();
         saveService = SaveService.getInstance();
         updateService = UpdateService.getInstance();
+        deleteService = DeleteService.getInstance();
     }
 
     public static OrderController getInstance() { return INSTANCE; }
@@ -101,6 +104,20 @@ public class OrderController {
         Map<String, Object> response = new HashMap<>();
 
         updateService.updateOrder(id, completed, plate_number, drivers, waypoints);
+
+        response.put("OK", "OK");
+        return response;
+    }
+
+    /**
+     * Deletes an order from the database using the DeleteService and puts "OK" back to the response map.
+     */
+    @RequestInfo(value = "OrderDelete.do", method = "POST")
+    public Map<String, Object> deleteOrder(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        Map<String, Object> response = new HashMap<>();
+
+        deleteService.deleteItem("Order", id);
 
         response.put("OK", "OK");
         return response;
