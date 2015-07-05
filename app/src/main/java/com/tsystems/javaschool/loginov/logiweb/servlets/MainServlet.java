@@ -47,31 +47,43 @@ public class MainServlet extends HttpServlet {
                 session.setAttribute("user", user);
             }
 
-            // List of items fetched from the db ("Records" in finalResponse)
+            Gson gson = new Gson();
+
+            // JSON for JTable: List of items fetched from the db ("Records" in finalResponse)
             if (resultMap.containsKey("data")) {
                 Object data = resultMap.get("data");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                String response = new Gson().toJson(data);
                 // JSON object for JTable to parse
-                String finalResponse = "{\"Result\":\"OK\",\"Records\":" + response + "}";
-//                String finalResponse = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
-                resp.getWriter().write(finalResponse);
-                logger.info("finalResponse = " + finalResponse);
+                String response = "{\"Result\":\"OK\",\"Records\":" + gson.toJson(data) + "}";
+//                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
+                resp.getWriter().write(response);
+                logger.info("JSON response = " + response);
                 return;
             }
 
-            // One item fetched from the db ("Record" in finalResponse)
+            // JSON for JTable: One item fetched from the db ("Record" in finalResponse)
             if (resultMap.containsKey("datum")) {
                 Object datum = resultMap.get("datum");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                String response = new Gson().toJson(datum);
                 // JSON object for JTable to parse
-                String finalResponse = "{\"Result\":\"OK\",\"Record\":" + response + "}";
-//                String finalResponse = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
-                resp.getWriter().write(finalResponse);
-                logger.info("finalResponse = " + finalResponse);
+                String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
+//                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
+                resp.getWriter().write(response);
+                logger.info("finalResponse = " + response);
+                return;
+            }
+
+            // JSON for JTable: One item fetched from the db ("Record" in finalResponse)
+            if (resultMap.containsKey("OK")) {
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                // JSON object for JTable to parse
+                String response = "{\"Result\":\"OK\"}";
+//                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
+                resp.getWriter().write(response);
+                logger.info("finalResponse = " + response);
                 return;
             }
 

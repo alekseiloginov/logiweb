@@ -6,19 +6,25 @@ $(document).ready(function () {
         actions: {
             listAction: 'OrderList.do',
             createAction: 'OrderSave.do',
-            updateAction: '/GettingStarted/UpdatePerson',
-            deleteAction: '/GettingStarted/DeletePerson'
+            updateAction: 'OrderUpdate.do',
+            deleteAction: 'OrderDelete.do'
         },
         fields: {
             id: {
+                key: true,
                 title: 'ID',
-                width: '5%'
+                width: '5%',
+                create: false,
+                edit: false
             },
             truck: {
                 title: 'Truck',
                 width: '10%',
                 display : function(data) {
                     return data.record.truck.plate_number;
+                },
+                input: function (data) {
+                    return '<input type="text" name="location" value="' + data.record.truck.plate_number + '" />';
                 }
             },
             drivers: {

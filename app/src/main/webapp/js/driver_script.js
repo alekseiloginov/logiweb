@@ -6,11 +6,12 @@ $(document).ready(function () {
         actions: {
             listAction: 'DriverList.do',
             createAction: 'DriverSave.do',
-            updateAction: '/GettingStarted/UpdatePerson',
-            deleteAction: '/GettingStarted/DeletePerson'
+            updateAction: 'DriverUpdate.do',
+            deleteAction: 'DriverDelete.do'
         },
         fields: {
             id: {
+                key: true,
                 title: 'ID',
                 width: '5%',
                 create: false,
@@ -46,6 +47,9 @@ $(document).ready(function () {
                 width: '15%',
                 display : function(data) {
                     return data.record.location.city;
+                },
+                input: function (data) {
+                    return '<input type="text" name="location" value="' + data.record.location.city + '" />';
                 }
             },
             truck: {
@@ -53,6 +57,9 @@ $(document).ready(function () {
                 width: '10%',
                 display : function(data) {
                     return data.record.truck.plate_number;
+                },
+                input: function (data) {
+                    return '<input type="text" name="truck" value="' + data.record.truck.plate_number + '" />';
                 }
             }
         }

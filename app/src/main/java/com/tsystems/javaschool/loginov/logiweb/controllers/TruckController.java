@@ -4,6 +4,7 @@ import com.tsystems.javaschool.loginov.logiweb.models.Location;
 import com.tsystems.javaschool.loginov.logiweb.models.Truck;
 import com.tsystems.javaschool.loginov.logiweb.services.ListService;
 import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
+import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class TruckController {
     static Logger logger = Logger.getLogger(TruckController.class);
     private ListService listService;
     private SaveService saveService;
+    private UpdateService updateService;
 
     public static final TruckController INSTANCE = new TruckController();
 
@@ -24,6 +26,7 @@ public class TruckController {
         if (TruckController.INSTANCE != null) throw new InstantiationError("Creating of this object is not allowed.");
         listService = ListService.getInstance();
         saveService = SaveService.getInstance();
+        updateService = UpdateService.getInstance();
     }
 
     public static TruckController getInstance() { return INSTANCE; }
@@ -67,6 +70,26 @@ public class TruckController {
         Object savedTruck = saveService.saveTruck(plate_number, driver_number, capacity, drivable, city);
 
         response.put("datum", savedTruck);
+        return response;
+    }
+
+    /**
+     * Updates a truck in the database using the UpdateService and puts "OK" back to the response map.
+     */
+    @RequestInfo(value = "TruckUpdate.do", method = "POST")
+    public Map<String, Object> updateTruck(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        String plate_number = ((String[]) requestParameters.get("plate_number"))[0];
+        int driver_number = Integer.parseInt(((String[]) requestParameters.get("driver_number"))[0]);
+        int capacity = Integer.parseInt(((String[]) requestParameters.get("capacity"))[0]);
+        int drivable = Integer.parseInt(((String[]) requestParameters.get("drivable"))[0]);
+        String city = ((String[]) requestParameters.get("location"))[0];
+
+        Map<String, Object> response = new HashMap<>();
+
+        updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
+
+        response.put("OK", "OK");
         return response;
     }
 }

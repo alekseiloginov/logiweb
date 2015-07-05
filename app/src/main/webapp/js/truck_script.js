@@ -6,10 +6,18 @@ $(document).ready(function () {
         actions: {
             listAction: 'TruckList.do',
             createAction: 'TruckSave.do',
-            updateAction: '/GettingStarted/UpdatePerson',
-            deleteAction: '/GettingStarted/DeletePerson'
+            updateAction: 'TruckUpdate.do',
+            deleteAction: 'TruckDelete.do'
         },
         fields: {
+            id: {
+                key: true,
+                title: 'ID',
+                width: '5%',
+                create: false,
+                edit: false,
+                list: false
+            },
             plate_number: {
                 title: 'Plate number',
                 width: '25%'
@@ -31,6 +39,9 @@ $(document).ready(function () {
                 width: '40%',
                 display : function(data) {
                     return data.record.location.city;
+                },
+                input: function (data) {
+                    return '<input type="text" name="location" value="' + data.record.location.city + '" />';
                 }
             }
         }

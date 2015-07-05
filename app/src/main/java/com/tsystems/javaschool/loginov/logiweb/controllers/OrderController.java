@@ -3,6 +3,7 @@ package com.tsystems.javaschool.loginov.logiweb.controllers;
 import com.tsystems.javaschool.loginov.logiweb.models.*;
 import com.tsystems.javaschool.loginov.logiweb.services.ListService;
 import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
+import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class OrderController {
     static Logger logger = Logger.getLogger(OrderController.class);
     private ListService listService;
     private SaveService saveService;
+    private UpdateService updateService;
 
     public static final OrderController INSTANCE = new OrderController();
 
@@ -24,6 +26,7 @@ public class OrderController {
         if (OrderController.INSTANCE != null) throw new InstantiationError("Creating of this object is not allowed.");
         listService = ListService.getInstance();
         saveService = SaveService.getInstance();
+        updateService = UpdateService.getInstance();
     }
 
     public static OrderController getInstance() { return INSTANCE; }
@@ -77,6 +80,29 @@ public class OrderController {
         Object savedOrder = saveService.saveOrder(completed, plate_number, drivers, waypoints);
 
         response.put("datum", savedOrder);
+        return response;
+    }
+
+    /**
+     * Updates an order in the database using the UpdateService and puts "OK" back to the response map.
+     */
+    @RequestInfo(value = "OrderUpdate.do", method = "POST")
+    public Map<String, Object> updateOrder(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        int completed = Integer.parseInt(((String[]) requestParameters.get("completed"))[0]);
+        String plate_number = ((String[]) requestParameters.get("truck"))[0];
+
+        @SuppressWarnings("unchecked")
+        Set<Driver> drivers = ((Set<Driver>[]) requestParameters.get("drivers"))[0];
+
+        @SuppressWarnings("unchecked")
+        Set<Waypoint> waypoints = ((Set<Waypoint>[]) requestParameters.get("waypoints"))[0];
+
+        Map<String, Object> response = new HashMap<>();
+
+        updateService.updateOrder(id, completed, plate_number, drivers, waypoints);
+
+        response.put("OK", "OK");
         return response;
     }
 }
