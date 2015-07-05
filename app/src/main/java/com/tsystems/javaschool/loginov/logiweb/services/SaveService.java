@@ -1,13 +1,26 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
+import com.tsystems.javaschool.loginov.logiweb.models.*;
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Set;
+
 /**
- * Adds an item (truck, driver, orders etc.) to the database.
+ * Adds an item (truck, driver, order etc.) to the database.
  */
 public class SaveService {
+
+    // Save driver status changes data for the future saveDriverStatusChange() method
+//        DriverStatusChange driverStatusChange = new DriverStatusChange("free", driver);
+//        session.save(driverStatusChange);
+
+    static Logger logger = Logger.getLogger(SaveService.class);
 
     public static final SaveService INSTANCE = new SaveService();
 
@@ -17,78 +30,128 @@ public class SaveService {
 
     public static SaveService getInstance() { return INSTANCE; }
 
-    public Object saveItem(Object item) {
+    /**
+     * Saves a truck to the database and returns saved object.
+     */
+    public Object saveTruck(String plate_number, int driver_number, int capacity, int drivable, String city) {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
-        // Save truck and location data
-//
-//        String city = "Moscow";
-//        Location location = new Location(city);
-//
-//        Query locationQuery = session.createQuery("from Location where city = :city");
-//        locationQuery.setString("city", city);
-//        Location dbLocation = (Location) locationQuery.uniqueResult();
-//
-//        if (dbLocation == null) {
-//            session.save(location);
-//            dbLocation = location;
-//        }
-//
-//        Truck truck = new Truck("ED57102", 2, 500, 1, dbLocation);
-//
-//        session.save(truck);
+        // TODO add plate_number check
 
+        Query locationQuery = session.createQuery("from Location where city = :city");
+        locationQuery.setString("city", city);
+        Location dbLocation = (Location) locationQuery.uniqueResult();
 
-        // Save manager data
+        if (dbLocation == null) {
+            Location location = new Location(city);
+            session.save(location);
+            dbLocation = location;
+        }
 
-//        String name = req.getParameter("name");
-//        String surname = req.getParameter("surname");
-//        String email = req.getParameter("email");
-//        int password = Integer.parseInt(req.getParameter("password"));
-//
-//        Manager manager = new Manager(name, surname, email, password);
-//
-//        session.save(manager);
+        Truck truck = new Truck(plate_number, driver_number, capacity, drivable, dbLocation);
+        int savedTruckID = (int) session.save(truck);
 
+        logger.info("savedTruckID: " + savedTruckID);
 
-        // Save driver data
+        Query truckQuery = session.createQuery("from Truck where id = :savedTruckID");
+        truckQuery.setInteger("savedTruckID", savedTruckID);
+        Truck savedTruck = (Truck) truckQuery.uniqueResult();
 
-//        String city1 = "Moscow";
-//        Location location1 = new Location(city1);
-//        Query locationQuery1 = session.createQuery("from Location where city = :city");
-//        locationQuery1.setString("city", city1);
-//        Location dbLocation1 = (Location) locationQuery1.uniqueResult();
-//        if (dbLocation1 == null) {
-//            // in production perhaps you couldn't add new city, show error message
-//            session.save(location1);
-//            dbLocation1 = location1;
-//        }
-//
-//        String truck_plate_number = "AB12345";
-//        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
-//        truckQuery.setString("plate_number", truck_plate_number);
-//        Truck truck = (Truck) truckQuery.uniqueResult();
-//        if (truck == null) {
-//            // show message "no truck with the entered plate number, add it first"
-//        }
-//
-//        Driver driver = new Driver("Grisha", "Chichvarkin", "gri@abc.com", 1234, 90, "shift", dbLocation1, truck);
-//        // check this driver for existence
-//
-//        session.save(driver);
+        session.getTransaction().commit();
 
-//
-//        // Save driver status changes data
-//        DriverStatusChange driverStatusChange = new DriverStatusChange("free", driver);
-//        session.save(driverStatusChange);
-//
+        return savedTruck;
+    }
+
+    /**
+     * Saves a driver to the database and returns saved object.
+     */
+    public Object saveDriver(String name, String surname, String email, String password, int worked_hours,
+                             String status, String city, String plate_number) {
+
+        // Password encryption using MD5
+        String encryptedPassword = null;
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(password.getBytes());
+            byte[] bytes = messageDigest.digest();
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (byte aByte : bytes) {
+                stringBuilder.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            encryptedPassword = stringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        // DB save
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        // TODO add email check
+
+        Query locationQuery = session.createQuery("from Location where city = :city");
+        locationQuery.setString("city", city);
+        Location dbLocation = (Location) locationQuery.uniqueResult();
+
+        if (dbLocation == null) {
+            // in production perhaps you couldn't add new city, show error message
+            Location location = new Location(city);
+            session.save(location);
+            dbLocation = location;
+        }
+
+        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
+        truckQuery.setString("plate_number", plate_number);
+        Truck dbTruck = (Truck) truckQuery.uniqueResult();
+
+        if (dbTruck == null) {
+            // show message "no truck with the entered plate number, add it first"
+        }
+
+        Driver driver = new Driver(name, surname, email, encryptedPassword, worked_hours, status, dbLocation, dbTruck);
+
+        int savedDriverID = (int) session.save(driver);
+        logger.info("savedDriverID: " + savedDriverID);
+
+        Query driverQuery = session.createQuery("from Driver where id = :savedDriverID");
+        driverQuery.setInteger("savedDriverID", savedDriverID);
+        Driver savedDriver = (Driver) driverQuery.uniqueResult();
+
+        session.getTransaction().commit();
+
+        return savedDriver;
+    }
+
+    /**
+     * Saves an order to the database and returns saved object.
+     */
+    public Object saveOrder(int completed, String plate_number, Set<Driver> drivers, Set<Waypoint> waypoints) {
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        // TODO add checks: 1. all freight should be loaded and unloaded, 2. valid trucks, 3. valid drives
+
+        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
+        truckQuery.setString("plate_number", plate_number);
+        Truck dbTruck = (Truck) truckQuery.uniqueResult();
+
+        if (dbTruck == null) {
+            // show message "no truck with the entered plate number, add it first"
+        }
+
 //        // Save freight data
+
 //        Freight freight = new Freight("iphones", 500, "shipped");
 //        session.save(freight);
 //
+
 //        // Save waypoint data
+
 //        Waypoint waypoint = new Waypoint("unloading", dbLocation1, freight);
 //        session.save(waypoint);
 
@@ -103,10 +166,17 @@ public class SaveService {
 //        waypoints.add(waypoint);
 //        waypoints.add(new Waypoint("loading", dbLocation1, new Freight("galaxies", 400, "delivered")));
 //
-//        Order order = new Order(0, truck, drivers, waypoints);
-//        session.save(order);
+        Order order = new Order(completed, dbTruck, drivers, waypoints);
+
+        int savedOrderID = (int) session.save(order);
+        logger.info("savedOrderID: " + savedOrderID);
+
+        Query orderQuery = session.createQuery("from Order where id = :savedOrderID");
+        orderQuery.setInteger("savedOrderID", savedOrderID);
+        Order savedOrder = (Order) orderQuery.uniqueResult();
 
         session.getTransaction().commit();
-        return item;
+
+        return savedOrder;
     }
 }

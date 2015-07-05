@@ -106,7 +106,7 @@ table, td, th {
     border-radius: 5px;
     color: white;
 }
-button {
+.ui-button {
     background: #3f8abf;
     width: 344px;
     margin: 10px 25px;

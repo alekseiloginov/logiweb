@@ -63,8 +63,8 @@ public class OrderController {
      */
     @RequestInfo(value = "OrderSave.do", method = "POST")
     public Map<String, Object> saveOrder(Map requestParameters) {
-        int completed = ((int[]) requestParameters.get("completed"))[0];
-        Truck truck = ((Truck[]) requestParameters.get("truck"))[0];
+        int completed = Integer.parseInt(((String[]) requestParameters.get("completed"))[0]);
+        String plate_number = ((String[]) requestParameters.get("truck"))[0];
 
         @SuppressWarnings("unchecked")
         Set<Driver> drivers = ((Set<Driver>[]) requestParameters.get("drivers"))[0];
@@ -74,10 +74,9 @@ public class OrderController {
 
         Map<String, Object> response = new HashMap<>();
 
-        Order order = new Order(completed, truck, drivers, waypoints);
+        Object savedOrder = saveService.saveOrder(completed, plate_number, drivers, waypoints);
 
-        Object savedTruck = saveService.saveItem(order);
-        response.put("data", savedTruck);
+        response.put("datum", savedOrder);
         return response;
     }
 }

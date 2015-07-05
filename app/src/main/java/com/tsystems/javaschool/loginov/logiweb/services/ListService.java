@@ -19,6 +19,9 @@ public class ListService {
 
     public static ListService getInstance() { return INSTANCE; }
 
+    /**
+     * Gets all items provided with the string from the database and returns them as a list.
+     */
     public List getAllItems(String item) {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();

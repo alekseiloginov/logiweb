@@ -16,8 +16,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Authentication service.
- * Validates user input to log in and returns founded user object,
- * otherwise throws custom exceptions.
+ * Validates user input to log in.
  */
 public class AuthService {
     static Logger logger = Logger.getLogger(AuthService.class);
@@ -30,6 +29,11 @@ public class AuthService {
 
     public static AuthService getInstance() { return INSTANCE; }
 
+    /**
+     * Authenticates a user.
+     * Validates user input and returns founded user object,
+     * otherwise throws custom exceptions.
+     */
     public Object authenticate(String email, String password, String role)
             throws UserNotFoundException, PasswordIncorrectException {
 

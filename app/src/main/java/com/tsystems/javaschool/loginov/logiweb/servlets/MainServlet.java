@@ -47,6 +47,7 @@ public class MainServlet extends HttpServlet {
                 session.setAttribute("user", user);
             }
 
+            // List of items fetched from the db ("Records" in finalResponse)
             if (resultMap.containsKey("data")) {
                 Object data = resultMap.get("data");
                 resp.setContentType("application/json");
@@ -54,6 +55,20 @@ public class MainServlet extends HttpServlet {
                 String response = new Gson().toJson(data);
                 // JSON object for JTable to parse
                 String finalResponse = "{\"Result\":\"OK\",\"Records\":" + response + "}";
+//                String finalResponse = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
+                resp.getWriter().write(finalResponse);
+                logger.info("finalResponse = " + finalResponse);
+                return;
+            }
+
+            // One item fetched from the db ("Record" in finalResponse)
+            if (resultMap.containsKey("datum")) {
+                Object datum = resultMap.get("datum");
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                String response = new Gson().toJson(datum);
+                // JSON object for JTable to parse
+                String finalResponse = "{\"Result\":\"OK\",\"Record\":" + response + "}";
 //                String finalResponse = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
                 resp.getWriter().write(finalResponse);
                 logger.info("finalResponse = " + finalResponse);

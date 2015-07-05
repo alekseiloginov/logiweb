@@ -14,8 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Registration service.
- * Validates user input to sign-up, if successful returns true,
- * otherwise throws a custom exception.
+ * Validates user input to sign-up.
  */
 public class RegService {
     static Logger logger = Logger.getLogger(RegService.class);
@@ -28,6 +27,11 @@ public class RegService {
 
     public static RegService getInstance() { return INSTANCE; }
 
+    /**
+     * Registers a manager.
+     * Validates manager's input, if successful returns true,
+     * otherwise throws a custom exception.
+     */
     public void register(String name, String surname, String email, String password) throws UsedEmailException {
         String encryptedPassword = null;
 

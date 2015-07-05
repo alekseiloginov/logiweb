@@ -12,7 +12,9 @@ $(document).ready(function () {
         fields: {
             id: {
                 title: 'ID',
-                width: '5%'
+                width: '5%',
+                create: false,
+                edit: false
             },
             name: {
                 title: 'Name',
@@ -25,6 +27,11 @@ $(document).ready(function () {
             email: {
                 title: 'Email',
                 width: '20%'
+            },
+            password: {
+                title: 'Password',
+                width: '10%',
+                list: false
             },
             worked_hours: {
                 title: 'Worked hours',

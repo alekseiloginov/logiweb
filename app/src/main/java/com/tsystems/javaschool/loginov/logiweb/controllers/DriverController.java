@@ -61,16 +61,17 @@ public class DriverController {
         String surname = ((String[]) requestParameters.get("surname"))[0];
         String email = ((String[]) requestParameters.get("email"))[0];
         String password = ((String[]) requestParameters.get("password"))[0];
-        int worked_hours = ((int[]) requestParameters.get("worked_hours"))[0];
+        int worked_hours = Integer.parseInt(((String[]) requestParameters.get("worked_hours"))[0]);
         String status = ((String[]) requestParameters.get("status"))[0];
-        Location location = ((Location[]) requestParameters.get("location"))[0];
-        Truck truck = ((Truck[]) requestParameters.get("truck"))[0];
+        String city = ((String[]) requestParameters.get("location"))[0];
+        String plate_number = ((String[]) requestParameters.get("truck"))[0];
+
         Map<String, Object> response = new HashMap<>();
 
-        Driver driver = new Driver(name, surname, email, password, worked_hours, status, location, truck);
+        Object savedDriver =
+                saveService.saveDriver(name, surname, email, password, worked_hours, status, city, plate_number);
 
-        Object savedTruck = saveService.saveItem(driver);
-        response.put("data", savedTruck);
+        response.put("datum", savedDriver);
         return response;
     }
 }

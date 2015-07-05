@@ -104,4 +104,15 @@ public class Truck {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    @Override
+    public String toString() {
+        return "Truck{" +
+                "plate_number='" + plate_number + '\'' +
+                ", driver_number=" + driver_number +
+                ", capacity=" + capacity +
+                ", drivable=" + drivable +
+                ", location=" + location.getCity() +
+                '}';
+    }
 }

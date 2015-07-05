@@ -57,16 +57,16 @@ public class TruckController {
     @RequestInfo(value = "TruckSave.do", method = "POST")
     public Map<String, Object> saveTruck(Map requestParameters) {
         String plate_number = ((String[]) requestParameters.get("plate_number"))[0];
-        int driver_number = ((int[]) requestParameters.get("driver_number"))[0];
-        int capacity = ((int[]) requestParameters.get("capacity"))[0];
-        int drivable = ((int[]) requestParameters.get("drivable"))[0];
-        Location location = ((Location[]) requestParameters.get("location"))[0];
+        int driver_number = Integer.parseInt(((String[]) requestParameters.get("driver_number"))[0]);
+        int capacity = Integer.parseInt(((String[]) requestParameters.get("capacity"))[0]);
+        int drivable = Integer.parseInt(((String[]) requestParameters.get("drivable"))[0]);
+        String city = ((String[]) requestParameters.get("location"))[0];
+
         Map<String, Object> response = new HashMap<>();
 
-        Truck truck = new Truck(plate_number, driver_number, capacity, drivable, location);
+        Object savedTruck = saveService.saveTruck(plate_number, driver_number, capacity, drivable, city);
 
-        Object savedTruck = saveService.saveItem(truck);
-        response.put("data", savedTruck);
+        response.put("datum", savedTruck);
         return response;
     }
 }
