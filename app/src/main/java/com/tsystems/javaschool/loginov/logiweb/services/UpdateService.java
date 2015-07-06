@@ -28,7 +28,7 @@ public class UpdateService {
     /**
      * Updates a truck in the database.
      */
-    public void updateTruck(int id, String plate_number, int driver_number, int capacity, int drivable, String city) {
+    public Object updateTruck(int id, String plate_number, int driver_number, int capacity, int drivable, String city) {
 
         logger.info("ID of the truck to update: " + id);
 
@@ -62,14 +62,18 @@ public class UpdateService {
         session.update(truckToUpdate);
         logger.info("Updated truck: " + truckToUpdate);
 
+        // multiple times usage of the created query
+        Object updatedTruck = truckQuery.uniqueResult();
         session.getTransaction().commit();
+
+        return updatedTruck;
     }
 
 
     /**
      * Updates a driver in the database.
      */
-    public void updateDriver(int id, String name, String surname, String email, String password, int worked_hours,
+    public Object updateDriver(int id, String name, String surname, String email, String password, int worked_hours,
                              String status, String city, String plate_number) {
 
         logger.info("ID of the driver to update: " + id);
@@ -133,13 +137,16 @@ public class UpdateService {
         session.update(driverToUpdate);
         logger.info("Updated driver: " + driverToUpdate);
 
+        Object updatedDriver = driverQuery.uniqueResult();
         session.getTransaction().commit();
+
+        return updatedDriver;
     }
 
     /**
      * Updates an order in the database.
      */
-    public void updateOrder(int id, int completed, String plate_number, Set<Driver> drivers, Set<Waypoint> waypoints) {
+    public Object updateOrder(int id, int completed, String plate_number, Set<Driver> drivers, Set<Waypoint> waypoints) {
 
         logger.info("ID of the order to update: " + id);
 
@@ -192,5 +199,10 @@ public class UpdateService {
 
         session.update(orderToUpdate);
         logger.info("Updated order: " + orderToUpdate);
+
+        Object updatedOrder = orderQuery.uniqueResult();
+        session.getTransaction().commit();
+
+        return updatedOrder;
     }
 }

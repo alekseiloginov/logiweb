@@ -103,9 +103,9 @@ public class OrderController {
 
         Map<String, Object> response = new HashMap<>();
 
-        updateService.updateOrder(id, completed, plate_number, drivers, waypoints);
+        Object updatedOrder = updateService.updateOrder(id, completed, plate_number, drivers, waypoints);
 
-        response.put("OK", "OK");
+        response.put("datum", updatedOrder);
         return response;
     }
 

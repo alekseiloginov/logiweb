@@ -88,9 +88,9 @@ public class TruckController {
 
         Map<String, Object> response = new HashMap<>();
 
-        updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
+        Object updatedTruck = updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
 
-        response.put("OK", "OK");
+        response.put("datum", updatedTruck);
         return response;
     }
 

@@ -95,9 +95,9 @@ public class DriverController {
 
         Map<String, Object> response = new HashMap<>();
 
-        updateService.updateDriver(id, name, surname, email, password, worked_hours, status, city, plate_number);
+        Object updatedDriver = updateService.updateDriver(id, name, surname, email, password, worked_hours, status, city, plate_number);
 
-        response.put("OK", "OK");
+        response.put("datum", updatedDriver);
         return response;
     }
 
