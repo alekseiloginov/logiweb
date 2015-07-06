@@ -49,7 +49,8 @@ $(document).ready(function () {
                     return data.record.location.city;
                 },
                 input: function (data) {
-                    return '<input type="text" name="location" value="' + data.record.location.city + '" />';
+                    var city_driver = data.record ? data.record.location.city : "";
+                    return '<input type="text" name="location" value="' + city_driver + '" />';
                 }
             },
             truck: {
@@ -59,7 +60,8 @@ $(document).ready(function () {
                     return data.record.truck.plate_number;
                 },
                 input: function (data) {
-                    return '<input type="text" name="truck" value="' + data.record.truck.plate_number + '" />';
+                    var plate_number_truck = data.record ? data.record.truck.plate_number : "";
+                    return '<input type="text" name="truck" value="' + plate_number_truck + '" />';
                 }
             }
         }

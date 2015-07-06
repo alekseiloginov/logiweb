@@ -10,7 +10,7 @@ import java.util.Date;
  * Simple java bean that will hold manager information.
  */
 @Entity
-@Table(name = "managers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
+@Table(name = "managers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "email"})})
 public class Manager {
 
     public Manager() {}

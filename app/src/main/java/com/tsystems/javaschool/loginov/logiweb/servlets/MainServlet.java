@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Controller class that handles all client requests (and calls appropriate services).
  */
-@WebServlet(name = "MainServlet", urlPatterns = {"*.do"})
+@WebServlet(name = "MainServlet", urlPatterns = {"*.do", "*.go"})
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     Logger logger = Logger.getLogger(MainServlet.class);
@@ -102,10 +102,12 @@ public class MainServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null && session.getAttribute("from") != null) {
             resultPage = (String) session.getAttribute("from");
             session.removeAttribute("from");
+            resp.sendRedirect(resultPage);
+            return;
         }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);
-        dispatcher.include(req, resp);
+        dispatcher.forward(req, resp);
     }
 
     /**

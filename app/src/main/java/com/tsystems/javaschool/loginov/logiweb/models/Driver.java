@@ -10,7 +10,7 @@ import java.util.Date;
  * Simple java bean that will hold driver information.
  */
 @Entity
-@Table(name = "drivers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
+@Table(name = "drivers", uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "email"})})
 public class Driver {
 
     public Driver() {}

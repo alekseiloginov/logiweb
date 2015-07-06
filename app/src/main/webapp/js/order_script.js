@@ -24,7 +24,8 @@ $(document).ready(function () {
                     return data.record.truck.plate_number;
                 },
                 input: function (data) {
-                    return '<input type="text" name="location" value="' + data.record.truck.plate_number + '" />';
+                    var plate_number_order = data.record ? data.record.truck.plate_number : "";
+                    return '<input type="text" name="truck" value="' + plate_number_order + '" />';
                 }
             },
             drivers: {

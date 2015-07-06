@@ -46,11 +46,11 @@ public class AuthFilter implements Filter {
             session.invalidate();
             resp.sendRedirect("/landing.html");
 
-        } else if ((session == null || session.getAttribute("user") == null) && uri.contains("/secure/")) {
+        } else if ((session == null || session.getAttribute("user") == null) && uri.endsWith(".do")) {
             session = req.getSession();
             session.setAttribute("from", uri);
             logger.error("Unauthorized access request");
-            resp.sendRedirect("/login.html");
+            resp.sendRedirect("/landing.html");
 
         } else {
             chain.doFilter(request, response);

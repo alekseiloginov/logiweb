@@ -41,7 +41,8 @@ $(document).ready(function () {
                     return data.record.location.city;
                 },
                 input: function (data) {
-                    return '<input type="text" name="location" value="' + data.record.location.city + '" />';
+                    var city_truck = data.record ? data.record.location.city : "";
+                    return '<input type="text" name="location" value="' + city_truck + '" />';
                 }
             }
         }

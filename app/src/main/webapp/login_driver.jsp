@@ -16,7 +16,7 @@
 <div class="container">
   <h2>Enter your email and password</h2>
 
-  <form name="loginForm" action="Login.do" onsubmit="return validateLoginForm()" method="post">
+  <form name="loginForm" action="Login.go" onsubmit="return validateLoginForm()" method="post">
     <input type="hidden" name="role" value="driver">
     <input id="email" type="text" name="email" placeholder="email"><br>
     <input id="password" type="password" name="password" placeholder="password"><br>

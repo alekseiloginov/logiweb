@@ -17,7 +17,7 @@
 <div class="container">
   <h2>Enter your name, surname, email and password</h2>
 
-  <form name="regForm" action="Register.do" onsubmit="return validateRegForm()" method="post">
+  <form name="regForm" action="Register.go" onsubmit="return validateRegForm()" method="post">
     <input id="name" type="text" name="name" placeholder="name"><br>
     <input id="surname" type="text" name="surname" placeholder="surname"><br>
     <input id="email" type="text" name="email" placeholder="email"><br>

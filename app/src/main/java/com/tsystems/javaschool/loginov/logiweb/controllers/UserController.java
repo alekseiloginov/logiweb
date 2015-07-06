@@ -32,7 +32,7 @@ public class UserController {
      * Validates user's log in input via AuthService, catches any exceptions
      * and puts the page to view with any error messages to the response map.
      */
-    @RequestInfo(value = "Login.do", method = "POST")
+    @RequestInfo(value = "Login.go", method = "POST")
     public Map<String, Object> authenticate(Map requestParameters) {
         String email = ((String[]) requestParameters.get("email"))[0];
         String password = ((String[]) requestParameters.get("password"))[0];
@@ -78,7 +78,7 @@ public class UserController {
      * Validates user's sign-up input via RegService, catches any exceptions
      * and puts the page to view with the success or error message to the response map.
      */
-    @RequestInfo(value = "Register.do", method = "POST")
+    @RequestInfo(value = "Register.go", method = "POST")
     public Map<String, Object> register(Map requestParameters) {
         String name = ((String[]) requestParameters.get("name"))[0];
         String surname = ((String[]) requestParameters.get("surname"))[0];
