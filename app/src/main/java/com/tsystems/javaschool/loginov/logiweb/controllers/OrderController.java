@@ -95,15 +95,9 @@ public class OrderController {
         int completed = Integer.parseInt(((String[]) requestParameters.get("completed"))[0]);
         String plate_number = ((String[]) requestParameters.get("truck"))[0];
 
-        @SuppressWarnings("unchecked")
-        Set<Driver> drivers = ((Set<Driver>[]) requestParameters.get("drivers"))[0];
-
-        @SuppressWarnings("unchecked")
-        Set<Waypoint> waypoints = ((Set<Waypoint>[]) requestParameters.get("waypoints"))[0];
-
         Map<String, Object> response = new HashMap<>();
 
-        Object updatedOrder = updateService.updateOrder(id, completed, plate_number, drivers, waypoints);
+        Object updatedOrder = updateService.updateOrder(id, plate_number, completed);
 
         response.put("datum", updatedOrder);
         return response;
