@@ -57,9 +57,15 @@ public class OrderController {
      */
     @RequestInfo(value = "OrderList.do", method = "POST")
     public Map<String, Object> getAllOrders(Map requestParameters) {
+        String sorting = null;
+
+        if (requestParameters.containsKey("jtSorting")) {
+            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
+        }
+
         Map<String, Object> response = new HashMap<>();
 
-        List orderList = listService.getAllItems("Order");
+        List orderList = listService.getAllItems("Order", sorting);
         response.put("data", orderList);
         return response;
     }

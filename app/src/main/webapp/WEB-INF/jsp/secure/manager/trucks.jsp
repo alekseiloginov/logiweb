@@ -3,7 +3,12 @@
 <html>
 <head>
     <title>Trucks</title>
+    <!-- My styles -->
     <link rel="stylesheet" href="../../../../css/style.css" />
+    <!-- JQuery UI - Overcast theme styles -->
+    <link rel="stylesheet" href="../../../../css/jquery-ui.css" />
+    <link rel="stylesheet" href="../../../../css/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="../../../../css/jquery-ui.structure.css" />
     <!-- jTable styles -->
     <link rel="stylesheet" href="../../../../jtable/themes/metro/lightgray/jtable.min.css" />
 </head>
@@ -28,5 +33,6 @@
 <script src="../../../../jtable/jquery.jtable.min.js" type="text/javascript"></script>
 <!-- My script file -->
 <script src="../../../../js/truck_script.js" type="text/javascript" charset="utf-8"></script>
+<%--<script src="../../../../jtable/localization/jquery.jtable.de.js" type="text/javascript" charset="utf-8"></script>--%>
 </body>
 </html>

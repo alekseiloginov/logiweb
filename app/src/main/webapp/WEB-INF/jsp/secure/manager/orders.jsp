@@ -3,7 +3,12 @@
 <html>
 <head>
     <title>Orders</title>
+    <!-- My styles -->
     <link rel="stylesheet" href="../../../../css/style.css" />
+    <!-- JQuery UI - Overcast theme styles -->
+    <link rel="stylesheet" href="../../../../css/jquery-ui.css" />
+    <link rel="stylesheet" href="../../../../css/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="../../../../css/jquery-ui.structure.css" />
     <!-- jTable styles -->
     <link rel="stylesheet" href="../../../../jtable/themes/metro/lightgray/jtable.min.css" />
 </head>

@@ -49,33 +49,51 @@ public class MainServlet extends HttpServlet {
 
             Gson gson = new Gson();
 
-            // JSON for JTable: List of items fetched from the db ("Records" in finalResponse)
+            // JSON for JTable: List of items fetched from the db ("Records" in response)
             if (resultMap.containsKey("data")) {
                 Object data = resultMap.get("data");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                // JSON object for JTable to parse
-                String response = "{\"Result\":\"OK\",\"Records\":" + gson.toJson(data) + "}";
-//                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
+                String response;
+
+                try {
+                    // Create a JSON object for JTable to parse
+                    response = "{\"Result\":\"OK\",\"Records\":" + gson.toJson(data) + "}";
+                    logger.info("JSON response = " + response);
+                } catch (Exception e) {
+                    String error = "Data conversion into JSON object problem.";
+                    response = "{\"Result\":\"ERROR\",\"Message\":" + error + "}";
+//                response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
+                    logger.error(error, e);
+                }
                 resp.getWriter().write(response);
-                logger.info("JSON response = " + response);
                 return;
             }
 
-            // JSON for JTable: One item fetched from the db ("Record" in finalResponse)
+            // JSON for JTable: One item fetched from the db ("Record" in response)
             if (resultMap.containsKey("datum")) {
+
+                // TODO add check if resultMap contains any errors that we added after catch, like MySQLIntegrityConstraintViolationException: Duplicate entry
                 Object datum = resultMap.get("datum");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                // JSON object for JTable to parse
-                String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
-//                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
+                String response;
+
+                try {
+                    // Create a JSON object for JTable to parse
+                    response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
+                    logger.info("JSON response = " + response);
+                } catch (Exception e) {
+                    String error = "Datum conversion into JSON object problem.";
+                    response = "{\"Result\":\"ERROR\",\"Message\":" + error + "}";
+//                    response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
+                    logger.error(error, e);
+                }
                 resp.getWriter().write(response);
-                logger.info("finalResponse = " + response);
                 return;
             }
 
-            // JSON for JTable: One item fetched from the db ("Record" in finalResponse)
+            // JSON for JTable: Operation with the db (deletion) is successful ("OK" in response)
             if (resultMap.containsKey("OK")) {
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
@@ -83,7 +101,7 @@ public class MainServlet extends HttpServlet {
                 String response = "{\"Result\":\"OK\"}";
 //                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
                 resp.getWriter().write(response);
-                logger.info("finalResponse = " + response);
+                logger.info("JSON response = " + response);
                 return;
             }
 

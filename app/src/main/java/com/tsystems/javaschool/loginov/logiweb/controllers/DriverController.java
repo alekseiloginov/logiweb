@@ -48,9 +48,15 @@ public class DriverController {
      */
     @RequestInfo(value = "DriverList.do", method = "POST")
     public Map<String, Object> getAllDrivers(Map requestParameters) {
+        String sorting = null;
+
+        if (requestParameters.containsKey("jtSorting")) {
+            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
+        }
+
         Map<String, Object> response = new HashMap<>();
 
-        List driverList = listService.getAllItems("Driver");
+        List driverList = listService.getAllItems("Driver", sorting);
         response.put("data", driverList);
         return response;
     }

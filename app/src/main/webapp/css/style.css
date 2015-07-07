@@ -97,39 +97,42 @@ table, td, th {
     text-align: center;
     color: green;
 }
-.ui-dialog {
-    background: #8d9aa5;
-    padding: 10px;
-    margin: 50px auto;
-    width: 400px !important;
-    border: 1px solid black;
-    border-radius: 5px;
-    color: white;
-}
-.ui-button {
-    background: #3f8abf;
-    width: 344px;
-    margin: 10px 25px;
-    height: 45px;
-    display: block;
-    border: 2px solid #3f8abf;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    -webkit-box-shadow: 0 2px 0 0 #3574a0;
-    -moz-box-shadow: 0 2px 0 0 #3574a0;
-    box-shadow: 0 2px 0 0 #3574a0;
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    -o-transition: 0.3s;
-    transition: 0.3s;
-}
-.ui-button-text {
-    font: 1.4em sans-serif;
-}
 .jtable-dialog-form {
-    margin: 10px 25px 0 25px;
+    margin: 0 0 0 0;
 }
-.ui-dialog-titlebar-close {
-    display: none;
+.jtable-custom-input, .jtable-text-input, .jtable-password-input {
+    height: 40px;
 }
+/*.ui-dialog {*/
+/*background: #8d9aa5;*/
+/*padding: 10px;*/
+/*margin: 50px auto;*/
+/*width: 400px !important;*/
+/*border: 1px solid black;*/
+/*border-radius: 5px;*/
+/*color: white;*/
+/*}*/
+/*.ui-button {*/
+/*background: #3f8abf;*/
+/*width: 344px;*/
+/*margin: 10px 25px;*/
+/*height: 45px;*/
+/*display: block;*/
+/*border: 2px solid #3f8abf;*/
+/*border-radius: 5px;*/
+/*color: white;*/
+/*cursor: pointer;*/
+/*-webkit-box-shadow: 0 2px 0 0 #3574a0;*/
+/*-moz-box-shadow: 0 2px 0 0 #3574a0;*/
+/*box-shadow: 0 2px 0 0 #3574a0;*/
+/*-webkit-transition: 0.3s;*/
+/*-moz-transition: 0.3s;*/
+/*-o-transition: 0.3s;*/
+/*transition: 0.3s;*/
+/*}*/
+/*.ui-button-text {*/
+/*font: 1.4em sans-serif;*/
+/*}*/
+/*.ui-dialog-titlebar-close {*/
+/*display: none;*/
+/*}*/

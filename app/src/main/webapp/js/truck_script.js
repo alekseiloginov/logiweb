@@ -3,6 +3,7 @@
 $(document).ready(function () {
     $('#TruckTableContainer').jtable({
         title: 'Table of trucks',
+        sorting: true,
         actions: {
             listAction: 'TruckList.do',
             createAction: 'TruckSave.do',
@@ -32,7 +33,10 @@ $(document).ready(function () {
             },
             drivable: {
                 title: 'Drivable',
-                width: '10%'
+                width: '10%',
+                type: 'radiobutton',
+                options: { '1': 'Yes', '0': 'No' },
+                defaultValue: '1'
             },
             location: {
                 title: 'Location',
@@ -45,6 +49,14 @@ $(document).ready(function () {
                     return '<input type="text" name="location" value="' + city_truck + '" />';
                 }
             }
+        },
+        formCreated: function (event, data) {
+            var $dialogDiv = data.form.closest('.ui-dialog');
+            $dialogDiv.position({
+                my: "top",
+                at: "top",
+                of: window
+            });
         }
     }).jtable('load');
 });

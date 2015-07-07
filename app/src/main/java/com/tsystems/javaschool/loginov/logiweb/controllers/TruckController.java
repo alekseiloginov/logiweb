@@ -48,9 +48,15 @@ public class TruckController {
      */
     @RequestInfo(value = "TruckList.do", method = "POST")
     public Map<String, Object> getAllTrucks(Map requestParameters) {
+        String sorting = null;
+
+        if (requestParameters.containsKey("jtSorting")) {
+            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
+        }
+
         Map<String, Object> response = new HashMap<>();
 
-        List truckList = listService.getAllItems("Truck");
+        List truckList = listService.getAllItems("Truck", sorting);
         response.put("data", truckList);
         return response;
     }

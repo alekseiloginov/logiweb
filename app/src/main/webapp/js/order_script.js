@@ -3,6 +3,7 @@
 $(document).ready(function () {
     $('#OrderTableContainer').jtable({
         title: 'Table of orders',
+        sorting: true,
         actions: {
             listAction: 'OrderList.do',
             createAction: 'OrderSave.do',
@@ -50,6 +51,14 @@ $(document).ready(function () {
                 title: 'Completed',
                 width: '15%'
             }
+        },
+        formCreated: function (event, data) {
+            var $dialogDiv = data.form.closest('.ui-dialog');
+            $dialogDiv.position({
+                my: "top",
+                at: "top",
+                of: window
+            });
         }
     }).jtable('load');
 });
