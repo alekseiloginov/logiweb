@@ -105,6 +105,27 @@ public class MainServlet extends HttpServlet {
                 return;
             }
 
+            // JSON for JTable: List of options fetched from the db ("Options" in response)
+            if (resultMap.containsKey("options")) {
+                Object options = resultMap.get("options");
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                String response;
+
+                try {
+                    // Create a JSON object for JTable to parse
+                    response = "{\"Result\":\"OK\",\"Options\":" + options + "}";
+                    logger.info("JSON response = " + response);
+                } catch (Exception e) {
+                    String error = "Data conversion into JSON object problem.";
+                    response = "{\"Result\":\"ERROR\",\"Message\":" + error + "}";
+//                response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
+                    logger.error(error, e);
+                }
+                resp.getWriter().write(response);
+                return;
+            }
+
             if (resultMap.containsKey("error")) {
                 Object error = resultMap.get("error");
                 req.setAttribute("error", error);

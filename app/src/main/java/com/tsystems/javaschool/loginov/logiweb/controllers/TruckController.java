@@ -1,9 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.services.DeleteService;
-import com.tsystems.javaschool.loginov.logiweb.services.ListService;
-import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
-import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
+import com.tsystems.javaschool.loginov.logiweb.services.*;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -19,6 +16,7 @@ public class TruckController {
     private SaveService saveService;
     private UpdateService updateService;
     private DeleteService deleteService;
+    private OptionService optionService;
 
     public static final TruckController INSTANCE = new TruckController();
 
@@ -28,6 +26,7 @@ public class TruckController {
         saveService = SaveService.getInstance();
         updateService = UpdateService.getInstance();
         deleteService = DeleteService.getInstance();
+        optionService = OptionService.getInstance();
     }
 
     public static TruckController getInstance() { return INSTANCE; }
@@ -111,6 +110,18 @@ public class TruckController {
         deleteService.deleteItem("Truck", id);
 
         response.put("OK", "OK");
+        return response;
+    }
+
+    /**
+     * Fetches a list of valid truck options using the OptionService and puts a returned JSON string to the response map.
+     */
+    @RequestInfo(value = "TruckOptions.do", method = "POST")
+    public Map<String, Object> getAllTruckOptions(Map requestParameters) {
+        Map<String, Object> response = new HashMap<>();
+
+        String truckOptionList = optionService.getTruckOptions();
+        response.put("options", truckOptionList);
         return response;
     }
 }

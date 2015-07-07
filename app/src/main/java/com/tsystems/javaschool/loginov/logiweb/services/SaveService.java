@@ -129,44 +129,16 @@ public class SaveService {
     /**
      * Saves an order to the database and returns saved object.
      */
-    public Object saveOrder(int completed, String plate_number, Set<Driver> drivers, Set<Waypoint> waypoints) {
+    public Object saveOrder(String plate_number, int completed) {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-
-        // TODO add checks: 1. all freight should be loaded and unloaded, 2. valid trucks, 3. valid drives
 
         Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
         truckQuery.setString("plate_number", plate_number);
         Truck dbTruck = (Truck) truckQuery.uniqueResult();
 
-        if (dbTruck == null) {
-            // show message "no truck with the entered plate number, add it first"
-        }
-
-//        // Save freight data
-
-//        Freight freight = new Freight("iphones", 500, "shipped");
-//        session.save(freight);
-//
-
-//        // Save waypoint data
-
-//        Waypoint waypoint = new Waypoint("unloading", dbLocation1, freight);
-//        session.save(waypoint);
-
-//
-//        // Save order data
-//
-//        Set<Driver> drivers = new HashSet<>();
-//        drivers.add(driver);
-//        drivers.add(new Driver("Nasty", "Molodaia", "nasty@abc.com", 1234, 70, "driving", dbLocation1, truck));
-//
-//        Set<Waypoint> waypoints = new HashSet<>();
-//        waypoints.add(waypoint);
-//        waypoints.add(new Waypoint("loading", dbLocation1, new Freight("galaxies", 400, "delivered")));
-//
-        Order order = new Order(completed, dbTruck, drivers, waypoints);
+        Order order = new Order(completed, dbTruck);
 
         int savedOrderID = (int) session.save(order);
         logger.info("savedOrderID: " + savedOrderID);
