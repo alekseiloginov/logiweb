@@ -151,9 +151,9 @@ public class OptionService {
 
         for (Driver validDriver : validDriverSet) {
             driverOptionJSONList += "{\"DisplayText\":\"";
-            driverOptionJSONList += validDriver.getSurname();
+            driverOptionJSONList += validDriver.getEmail();
             driverOptionJSONList += "\",\"Value\":\"";
-            driverOptionJSONList += validDriver.getSurname();
+            driverOptionJSONList += validDriver.getEmail();
             ++optionCount;
 
             if (optionCount < validDriverSet.size()) {

@@ -42,7 +42,6 @@ $(document).ready(function () {
                             $img.closest('tr'),
                             {
                                 title: orderData.record.truck.plate_number + ' - Truck drivers',
-                                sorting: true,
                                 actions: {
                                     // with URL encoding of the current order ID
                                     listAction: 'OrderTruckDriverList.do?orderID=' + orderData.record.id,
@@ -73,13 +72,16 @@ $(document).ready(function () {
                                     surname: {
                                         title: 'Surname',
                                         width: '15%',
-                                        options: 'DriverOptions.do?orderID=' + orderData.record.id,
+                                        create: false,
+                                        edit: false
                                     },
                                     email: {
                                         title: 'Email',
                                         width: '20%',
-                                        create: false,
-                                        edit: false
+                                        options: 'DriverOptions.do?orderID=' + orderData.record.id,
+                                        display : function(data) {
+                                            return data.record.email;
+                                        }
                                     },
                                     location: {
                                         title: 'Location',

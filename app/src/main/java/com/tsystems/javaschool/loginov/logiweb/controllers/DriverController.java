@@ -129,15 +129,10 @@ public class DriverController {
     @RequestInfo(value = "OrderTruckDriverList.do", method = "POST")
     public Map<String, Object> getAllOrderTruckDrivers(Map requestParameters) {
         int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
-        String sorting = null;
-
-        if (requestParameters.containsKey("jtSorting")) {
-            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
-        }
 
         Map<String, Object> response = new HashMap<>();
 
-        Set<Driver> driverSet = listService.getAllOrderDrivers(orderID, sorting);
+        Set<Driver> driverSet = listService.getAllOrderDrivers(orderID);
         response.put("data", driverSet);
         return response;
     }
@@ -162,22 +157,13 @@ public class DriverController {
     @RequestInfo(value = "OrderTruckDriverSave.do", method = "POST")
     public Map<String, Object> saveOrderTruckDrivers(Map requestParameters) {
         int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
-
-        String name = ((String[]) requestParameters.get("name"))[0];
-        String surname = ((String[]) requestParameters.get("surname"))[0];
-        String email = ((String[]) requestParameters.get("email"))[0];
-        String password = ((String[]) requestParameters.get("password"))[0];
-        int worked_hours = Integer.parseInt(((String[]) requestParameters.get("worked_hours"))[0]);
-        String status = ((String[]) requestParameters.get("status"))[0];
-        String city = ((String[]) requestParameters.get("location"))[0];
-        String plate_number = ((String[]) requestParameters.get("truck"))[0];
+        String driverEmail = ((String[]) requestParameters.get("email"))[0];
 
         Map<String, Object> response = new HashMap<>();
 
-        Object savedDriver = saveService.saveOrderDriver(orderID, name, surname, email, password,
-                worked_hours, status, city, plate_number);
+        Object savedOrderDriver = saveService.saveOrderDriver(orderID, driverEmail);
 
-        response.put("datum", savedDriver);
+        response.put("datum", savedOrderDriver);
         return response;
     }
 }

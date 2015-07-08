@@ -155,8 +155,7 @@ public class SaveService {
     /**
      * Saves a driver to the database and returns saved object.
      */
-    public Object saveOrderDriver(int orderID, String name, String surname, String email, String password,
-                                  int worked_hours, String status, String city, String plate_number) {
+    public Object saveOrderDriver(int orderID, String driverEmail) {
 
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
@@ -166,48 +165,24 @@ public class SaveService {
         orderQuery.setInteger("orderID", orderID);
         Order order = (Order) orderQuery.uniqueResult();
 
-        session.getTransaction().commit();
-
-        int orderTruckDriverNumber = order.getTruck().getDriver_number();
-        String orderTruckCity = order.getTruck().getLocation().getCity();
-
-
-
+        Query driverQuery = session.createQuery("from Driver where email = :driverEmail");
+        driverQuery.setString("driverEmail", driverEmail);
+        Driver driver = (Driver) driverQuery.uniqueResult();
 
         // TODO handle situation when there is no more space for new drivers in a truck
 
-        // TODO get "String orderTruckPlateNumber = order.getTruck().getPlate_number();" and add truck to driver
+        // assign an order truck to the driver and update in the database
+        driver.setTruck(order.getTruck());
+        session.update(driver);
 
-        Query locationQuery = session.createQuery("from Location where city = :city");
-        locationQuery.setString("city", city);
-        Location dbLocation = (Location) locationQuery.uniqueResult();
-
-        if (dbLocation == null) {
-            // in production perhaps you couldn't add new city, show error message
-            Location location = new Location(city);
-            session.save(location);
-            dbLocation = location;
-        }
-
-        Query truckQuery = session.createQuery("from Truck where plate_number = :plate_number");
-        truckQuery.setString("plate_number", plate_number);
-        Truck dbTruck = (Truck) truckQuery.uniqueResult();
-
-        if (dbTruck == null) {
-            // show message "no truck with the entered plate number, add it first"
-        }
-
-        Driver driver = new Driver();
-
-        int savedDriverID = (int) session.save(driver);
-        logger.info("savedDriverID: " + savedDriverID);
-
-        Query driverQuery = session.createQuery("from Driver where id = :savedDriverID");
-        driverQuery.setInteger("savedDriverID", savedDriverID);
-        Driver savedDriver = (Driver) driverQuery.uniqueResult();
+        // assign an driver to the order and update in the database
+        Set<Driver> driverSet = order.getDrivers();
+        driverSet.add(driver);
+        order.setDrivers(driverSet);
+        session.update(order);
 
         session.getTransaction().commit();
 
-        return savedDriver;
+        return driver;
     }
 }

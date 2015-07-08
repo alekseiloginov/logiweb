@@ -3,7 +3,6 @@ package com.tsystems.javaschool.loginov.logiweb.services;
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.models.Order;
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,7 +14,6 @@ import java.util.Set;
  * Fetches all items (trucks, drivers, orders etc.) from the database.
  */
 public class ListService {
-    static Logger logger = Logger.getLogger(ListService.class);
 
     public static final ListService INSTANCE = new ListService();
 
@@ -51,26 +49,17 @@ public class ListService {
     /**
      * Gets all drivers for the provided order ID from the database and returns them as a set of drivers.
      */
-    public Set<Driver> getAllOrderDrivers(int orderID, String sorting) {
+    public Set<Driver> getAllOrderDrivers(int orderID) {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
-        Query orderQuery;
+        Query orderQuery = session.createQuery("from Order where id = :orderID");
 
-        // Do we need SORTING here?
-
-        if (sorting != null) {
-            orderQuery = session.createQuery("from Order where id = :orderID order by " + sorting);
-        } else {
-            orderQuery = session.createQuery("from Order where id = :orderID");
-        }
         orderQuery.setInteger("orderID", orderID);
         Order order = (Order) orderQuery.uniqueResult();
         session.getTransaction().commit();
 
-        Set<Driver> driverSet = order.getDrivers();
-
-        return driverSet;
+        return order.getDrivers();
     }
 }
