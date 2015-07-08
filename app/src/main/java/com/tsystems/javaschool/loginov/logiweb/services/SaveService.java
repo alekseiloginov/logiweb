@@ -185,4 +185,48 @@ public class SaveService {
 
         return driver;
     }
+
+    /**
+     * Saves a freight with associated waypoints to the database and returns saved freight.
+     */
+    public Object saveFreight(String name, int weight, String loadingLocation, String unloadingLocation, String status) {
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        Freight freight = new Freight(name, weight, status);
+        int savedFreightID = (int) session.save(freight);
+
+        logger.info("savedFreightID: " + savedFreightID);
+
+        Query freightQuery = session.createQuery("from Freight where id = :savedFreightID");
+        freightQuery.setInteger("savedFreightID", savedFreightID);
+        Freight savedFreight = (Freight) freightQuery.uniqueResult();
+
+        // Now we need to save waypoints associated with the freight's loading and unloading
+
+        // get a location object of the freight loading
+        Query locationQuery = session.createQuery("from Location where city = :location");
+        locationQuery.setString("location", loadingLocation);
+        Location dbLoadingLocation = (Location) locationQuery.uniqueResult();
+
+        // get a location object of the freight unloading
+        locationQuery.setString("location", unloadingLocation);
+        Location dbUnloadingLocation = (Location) locationQuery.uniqueResult();
+
+        // save associated waypoints
+        Waypoint waypoint = new Waypoint("loading", dbLoadingLocation, savedFreight);
+        session.save(waypoint);
+
+        waypoint = new Waypoint("unloading", dbUnloadingLocation, savedFreight);
+        session.save(waypoint);
+
+        session.getTransaction().commit();
+
+        // add loading and unloading cities to freight object to ease JTable fields parsing
+        savedFreight.setLoading(loadingLocation);
+        savedFreight.setUnloading(unloadingLocation);
+
+        return savedFreight;
+    }
 }

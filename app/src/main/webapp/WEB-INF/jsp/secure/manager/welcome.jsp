@@ -10,6 +10,7 @@
     <a href="Trucks.do" title="Truck list">Trucks</a>
     <a href="Drivers.do" title="Driver list">Drivers</a>
     <a href="Orders.do" title="Order list">Orders</a>
+    <a href="Freights.do" title="Freight list">Freights</a>
 </nav>
 <br>
 

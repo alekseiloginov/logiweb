@@ -44,7 +44,7 @@ $(document).ready(function () {
                 width: '10%',
                 type: 'radiobutton',
                 options: { 'free': 'free', 'shift': 'shift', 'driving': 'driving' },
-                defaultValue: 'true'
+                defaultValue: 'free'
             },
             location: {
                 title: 'Location',
@@ -64,7 +64,7 @@ $(document).ready(function () {
                     return data.record.truck !== undefined ? data.record.truck.plate_number : "";
                 },
                 input: function (data) {
-                    var plate_number_truck = data.record.truck !== undefined ? data.record.truck.plate_number : "";
+                    var plate_number_truck = (!data.record || data.record.truck === undefined) ? "" : data.record.truck.plate_number ;
                     return '<input type="text" name="truck" value="' + plate_number_truck + '" />';
                 }
             }

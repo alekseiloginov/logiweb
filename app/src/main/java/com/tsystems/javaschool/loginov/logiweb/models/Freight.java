@@ -21,6 +21,14 @@ public class Freight {
         this.status = status;
     }
 
+    public Freight(String name, int weight, String status, String loading, String unloading) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+        this.loading = loading;
+        this.unloading = unloading;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -42,6 +50,28 @@ public class Freight {
     @UpdateTimestamp
     @Column(name = "last_modified_time")
     private Date last_modified_time;
+
+    // below 2 fields are only for easy data manipulation, not for persistence
+    @Transient
+    private String loading;
+    @Transient
+    private String unloading;
+
+    public String getLoading() {
+        return loading;
+    }
+
+    public void setLoading(String loading) {
+        this.loading = loading;
+    }
+
+    public String getUnloading() {
+        return unloading;
+    }
+
+    public void setUnloading(String unloading) {
+        this.unloading = unloading;
+    }
 
     public int getId() {
         return id;

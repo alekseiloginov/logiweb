@@ -18,6 +18,75 @@ $(document).ready(function () {
                 create: false,
                 edit: false
             },
+            //CHILD TABLE DEFINITION FOR "ORDER WAYPOINTS"
+            waypoints: {
+                title: 'Waypoints',
+                width: '5%',
+                sorting: false,
+                edit: false,
+                create: false,
+                display: function (orderData) {
+                    //Create an image that will be used to open child table
+                    var $img = $('<img src="/images/list_metro.png" title="View waypoints" />');
+                    //Open child table when user clicks the image
+                    $img.click(function () {
+                        $('#OrderTableContainer').jtable('openChildTable',
+                            $img.closest('tr'),
+                            {
+                                title: 'Order #' + orderData.record.id + ' - Waypoints',
+                                actions: {
+                                    // with URL encoding of the current order ID
+                                    listAction: 'OrderWaypointList.do?orderID=' + orderData.record.id,
+                                    createAction: 'OrderWaypointSave.do?orderID=' + orderData.record.id,
+                                    updateAction: '/Demo/UpdatePhone',
+                                    deleteAction: '/Demo/DeletePhone'
+                                },
+                                fields: {
+                                    // Order ID
+                                    //id: {
+                                    //    type: 'hidden',
+                                    //    defaultValue: orderData.record.id
+                                    //},
+
+                                    // Waypoint ID
+                                    id: {
+                                        key: true,
+                                        create: false,
+                                        edit: false,
+                                        list: false
+                                    },
+                                    location: {
+                                        title: 'Location',
+                                        width: '15%',
+                                        create: false,
+                                        edit: false,
+                                        display : function(data) {
+                                            return data.record.location.city;
+                                        }
+                                    },
+                                    freight: {
+                                        title: 'Freight',
+                                        width: '10%',
+                                        options: 'FreightOptions.do?orderID=' + orderData.record.id,
+                                        display : function(data) {
+                                            return data.record.freight.name;
+                                        }
+                                    },
+                                    operation: {
+                                        title: 'Operation',
+                                        width: '15%',
+                                        create: false,
+                                        edit: false
+                                    }
+                                }
+                            }, function (data) { //opened handler
+                                data.childTable.jtable('load');
+                            });
+                    });
+                    //Return image to show on the person row
+                    return $img;
+                }
+            },
             truck: {
                 title: 'Truck',
                 width: '10%',
@@ -35,13 +104,13 @@ $(document).ready(function () {
                 create: false,
                 display: function (orderData) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img src="/images/list_metro.png" title="Edit drivers" />');
+                    var $img = $('<img src="/images/list_metro.png" title="View drivers" />');
                     //Open child table when user clicks the image
                     $img.click(function () {
                         $('#OrderTableContainer').jtable('openChildTable',
                             $img.closest('tr'),
                             {
-                                title: orderData.record.truck.plate_number + ' - Truck drivers',
+                                title: 'Order #' + orderData.record.id + ' - Truck drivers',
                                 actions: {
                                     // with URL encoding of the current order ID
                                     listAction: 'OrderTruckDriverList.do?orderID=' + orderData.record.id,
@@ -90,10 +159,6 @@ $(document).ready(function () {
                                         edit: false,
                                         display : function(data) {
                                             return data.record.location.city;
-                                        },
-                                        input: function (data) {
-                                            var city_driver = data.record ? data.record.location.city : "";
-                                            return '<input type="text" name="location" value="' + city_driver + '" />';
                                         }
                                     },
                                     worked_hours: {
@@ -110,16 +175,6 @@ $(document).ready(function () {
                     //Return image to show on the person row
                     return $img;
                 }
-            //},
-            //waypoints: {
-            //    title: 'Waypoints',
-            //    width: '20%'
-                //,
-                //display : function(data) {
-                //    return data.record.waypoints.(operation, location.city, freight.name);
-                    // + freight (id, name, weight, status)
-                    // + type (loading/unloading)
-                //}
             },
             completed: {
                 title: 'Completed',

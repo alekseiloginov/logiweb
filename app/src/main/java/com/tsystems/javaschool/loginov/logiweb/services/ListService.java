@@ -1,8 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
-import com.tsystems.javaschool.loginov.logiweb.models.Order;
+import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -40,6 +39,34 @@ public class ListService {
             itemList = session.createQuery("from " + item + " order by " + sorting).list();
         } else {
             itemList = session.createQuery("from " + item).list();
+        }
+
+        // dirty hack
+        if (item.equals("Freight")) {
+
+            // We need to get cities associated with the freight's loading and unloading from the Waypoint objects
+
+            for (Object freightObject : itemList) {
+                Freight freight = (Freight) freightObject;
+                int freightID = freight.getId();
+
+                // get a waypoint object of the freight loading
+                Query waypointQuery =
+                        session.createQuery("from Waypoint where freight_id = :freight_id and operation = :operation");
+                waypointQuery.setInteger("freight_id", freightID);
+                waypointQuery.setString("operation", "loading");
+                Waypoint dbLoadingWaypoint = (Waypoint) waypointQuery.uniqueResult();
+
+                // get a waypoint object of the freight unloading
+                waypointQuery.setString("operation", "unloading");
+                Waypoint dbLUnloadingWaypoint = (Waypoint) waypointQuery.uniqueResult();
+
+                String loadingLocation = dbLoadingWaypoint.getLocation().getCity();
+                String unloadingLocation = dbLUnloadingWaypoint.getLocation().getCity();
+
+                freight.setLoading(loadingLocation);
+                freight.setUnloading(unloadingLocation);
+            }
         }
 
         session.getTransaction().commit();
