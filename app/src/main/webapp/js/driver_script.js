@@ -3,7 +3,6 @@
 $(document).ready(function () {
     $('#DriverTableContainer').jtable({
         title: 'Table of drivers',
-        sorting: true,
         actions: {
             listAction: 'DriverList.do',
             createAction: 'DriverSave.do',
@@ -45,7 +44,7 @@ $(document).ready(function () {
                 width: '10%',
                 type: 'radiobutton',
                 options: { 'free': 'free', 'shift': 'shift', 'driving': 'driving' },
-                defaultValue: 'free'
+                defaultValue: 'true'
             },
             location: {
                 title: 'Location',
@@ -62,10 +61,10 @@ $(document).ready(function () {
                 title: 'Truck',
                 width: '10%',
                 display : function(data) {
-                    return data.record.truck.plate_number;
+                    return data.record.truck !== undefined ? data.record.truck.plate_number : "";
                 },
                 input: function (data) {
-                    var plate_number_truck = data.record ? data.record.truck.plate_number : "";
+                    var plate_number_truck = data.record.truck !== undefined ? data.record.truck.plate_number : "";
                     return '<input type="text" name="truck" value="' + plate_number_truck + '" />';
                 }
             }

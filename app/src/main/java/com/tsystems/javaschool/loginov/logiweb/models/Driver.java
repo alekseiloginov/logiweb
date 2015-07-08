@@ -62,8 +62,8 @@ public class Driver {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "truck_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "truck_id")
     private Truck truck;
 
 

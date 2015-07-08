@@ -25,15 +25,10 @@ $(document).ready(function () {
                 display : function(data) {
                     return data.record.truck.plate_number;
                 }
-                //,
-                //input: function (data) {
-                //    var plate_number_order = data.record ? data.record.truck.plate_number : "";
-                //    return '<input type="text" name="truck" value="' + plate_number_order + '" />';
-                //}
             },
             //CHILD TABLE DEFINITION FOR "ORDER TRUCK DRIVERS"
             drivers: {
-                title: '',
+                title: 'Drivers',
                 width: '5%',
                 sorting: false,
                 edit: false,
@@ -46,12 +41,14 @@ $(document).ready(function () {
                         $('#OrderTableContainer').jtable('openChildTable',
                             $img.closest('tr'),
                             {
-                                title: orderData.record.truck + ' - Truck Drivers',
+                                title: orderData.record.truck.plate_number + ' - Truck drivers',
+                                sorting: true,
                                 actions: {
-                                    listAction: 'DriverList.do' + orderData.record.id,
-                                    deleteAction: '/Demo/DeletePhone',
+                                    // with URL encoding of the current order ID
+                                    listAction: 'OrderTruckDriverList.do?orderID=' + orderData.record.id,
+                                    createAction: 'OrderTruckDriverSave.do?orderID=' + orderData.record.id,
                                     updateAction: '/Demo/UpdatePhone',
-                                    createAction: '/Demo/CreatePhone'
+                                    deleteAction: '/Demo/DeletePhone'
                                 },
                                 fields: {
                                     // Order ID
@@ -76,8 +73,7 @@ $(document).ready(function () {
                                     surname: {
                                         title: 'Surname',
                                         width: '15%',
-                                        create: false,
-                                        edit: false
+                                        options: 'DriverOptions.do?orderID=' + orderData.record.id,
                                     },
                                     email: {
                                         title: 'Email',
@@ -100,7 +96,9 @@ $(document).ready(function () {
                                     },
                                     worked_hours: {
                                         title: 'Worked hours',
-                                        width: '12%'
+                                        width: '12%',
+                                        create: false,
+                                        edit: false
                                     }
                                 }
                             }, function (data) { //opened handler
