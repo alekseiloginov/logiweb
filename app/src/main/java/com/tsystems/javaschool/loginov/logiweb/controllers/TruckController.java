@@ -80,7 +80,7 @@ public class TruckController {
     }
 
     /**
-     * Updates a truck in the database using the UpdateService and puts "OK" back to the response map.
+     * Updates a truck in the database using the UpdateService and puts the updated truck back to the response map.
      */
     @RequestInfo(value = "TruckUpdate.do", method = "POST")
     public Map<String, Object> updateTruck(Map requestParameters) {

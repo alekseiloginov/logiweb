@@ -92,37 +92,38 @@ public class FreightController {
         return response;
     }
 
-//    /**
-//     * Updates a truck in the database using the UpdateService and puts "OK" back to the response map.
-//     */
-//    @RequestInfo(value = "FreightUpdate.do", method = "POST")
-//    public Map<String, Object> updateTruck(Map requestParameters) {
-//        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
-//        String plate_number = ((String[]) requestParameters.get("plate_number"))[0];
-//        int driver_number = Integer.parseInt(((String[]) requestParameters.get("driver_number"))[0]);
-//        int capacity = Integer.parseInt(((String[]) requestParameters.get("capacity"))[0]);
-//        int drivable = Integer.parseInt(((String[]) requestParameters.get("drivable"))[0]);
-//        String city = ((String[]) requestParameters.get("location"))[0];
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        Object updatedTruck = updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
-//
-//        response.put("datum", updatedTruck);
-//        return response;
-//    }
+    /**
+     * Updates a freight in the database using the UpdateService and puts the updated freight back to the response map.
+     */
+    @RequestInfo(value = "FreightUpdate.do", method = "POST")
+    public Map<String, Object> updateFreight(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        String name = ((String[]) requestParameters.get("name"))[0];
+        int weight = Integer.parseInt(((String[]) requestParameters.get("weight"))[0]);
+        String loadingLocation = ((String[]) requestParameters.get("loading"))[0];
+        String unloadingLocation = ((String[]) requestParameters.get("unloading"))[0];
+        String status = ((String[]) requestParameters.get("status"))[0];
 
-//    /**
-//     * Deletes a truck from the database using the DeleteService and puts "OK" back to the response map.
-//     */
-//    @RequestInfo(value = "FreightDelete.do", method = "POST")
-//    public Map<String, Object> deleteTruck(Map requestParameters) {
-//        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
-//        Map<String, Object> response = new HashMap<>();
-//
-//        deleteService.deleteItem("Truck", id);
-//
-//        response.put("OK", "OK");
-//        return response;
-//    }
+        Map<String, Object> response = new HashMap<>();
+
+        Object updatedFreight =
+                updateService.updateFreight(id, name, weight, loadingLocation, unloadingLocation, status);
+
+        response.put("datum", updatedFreight);
+        return response;
+    }
+
+    /**
+     * Deletes a freight from the database using the DeleteService and puts "OK" back to the response map.
+     */
+    @RequestInfo(value = "FreightDelete.do", method = "POST")
+    public Map<String, Object> deleteFreight(Map requestParameters) {
+        int id = Integer.parseInt(((String[]) requestParameters.get("id"))[0]);
+        Map<String, Object> response = new HashMap<>();
+
+        deleteService.deleteItem("Freight", id);
+
+        response.put("OK", "OK");
+        return response;
+    }
 }

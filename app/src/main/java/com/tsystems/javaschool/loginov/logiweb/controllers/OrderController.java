@@ -87,7 +87,7 @@ public class OrderController {
     }
 
     /**
-     * Updates an order in the database using the UpdateService and puts "OK" back to the response map.
+     * Updates an order in the database using the UpdateService and puts the updated order back to the response map.
      */
     @RequestInfo(value = "OrderUpdate.do", method = "POST")
     public Map<String, Object> updateOrder(Map requestParameters) {
