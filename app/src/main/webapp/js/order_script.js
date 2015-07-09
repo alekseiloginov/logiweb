@@ -58,8 +58,8 @@ $(document).ready(function () {
                                     location: {
                                         title: 'Location',
                                         width: '15%',
-                                        create: false,
                                         edit: false,
+                                        options: 'LocationOptions.do',
                                         display : function(data) {
                                             return data.record.location.city;
                                         }
@@ -67,7 +67,19 @@ $(document).ready(function () {
                                     freight: {
                                         title: 'Freight',
                                         width: '10%',
-                                        options: 'FreightOptions.do?orderID=' + orderData.record.id,
+                                        edit: false,
+                                        dependsOn: 'location',
+                                        options: function (data) {
+                                            if (data.source == 'list') {
+                                                //Return url of all countries for optimization.
+                                                //This method is called for each row on the table and jTable caches options based on this url.
+                                                return 'FreightOptions.do?city=0&orderID=' + orderData.record.id;
+                                            }
+
+                                            //This code runs when user opens edit/create form or changes continental combobox on an edit/create form.
+                                            //data.source == 'edit' || data.source == 'create'
+                                            return 'FreightOptions.do?city=' + data.dependedValues.location + '&orderID=' + orderData.record.id;
+                                        },
                                         display : function(data) {
                                             return data.record.freight.name;
                                         }

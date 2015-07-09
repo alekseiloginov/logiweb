@@ -54,8 +54,8 @@ public class Order {
     private Set<Driver> drivers;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "order_drivers", joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "driver_id"))
+    @JoinTable(name = "order_waypoints", joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "waypoint_id"))
     private Set<Waypoint> waypoints;
 
     public int getId() {

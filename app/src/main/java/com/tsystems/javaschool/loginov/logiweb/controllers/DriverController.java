@@ -138,24 +138,10 @@ public class DriverController {
     }
 
     /**
-     * Fetches a list of valid driver options using the OptionService and puts a returned JSON string to the response map.
-     */
-    @RequestInfo(value = "DriverOptions.do", method = "POST")
-    public Map<String, Object> getAllDriverOptions(Map requestParameters) {
-        int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
-
-        Map<String, Object> response = new HashMap<>();
-
-        String driverOptionList = optionService.getDriverOptions(orderID);
-        response.put("options", driverOptionList);
-        return response;
-    }
-
-    /**
-     * Adds a driver the required order using the SaveService and puts the saved driver back to the response map.
+     * Adds a driver to the required order using the SaveService and puts the saved driver back to the response map.
      */
     @RequestInfo(value = "OrderTruckDriverSave.do", method = "POST")
-    public Map<String, Object> saveOrderTruckDrivers(Map requestParameters) {
+    public Map<String, Object> saveOrderTruckDriver(Map requestParameters) {
         int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
         String driverEmail = ((String[]) requestParameters.get("email"))[0];
 
@@ -164,6 +150,20 @@ public class DriverController {
         Object savedOrderDriver = saveService.saveOrderDriver(orderID, driverEmail);
 
         response.put("datum", savedOrderDriver);
+        return response;
+    }
+
+    /**
+     * Fetches a list of valid driver options using the OptionService and puts a returned JSON string to the response map.
+     */
+    @RequestInfo(value = "DriverOptions.do", method = "POST")
+    public Map<String, Object> getAllDriverOptions(Map requestParameters) {
+        int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
+
+        Map<String, Object> response = new HashMap<>();
+
+        String driverOptionJSONList = optionService.getDriverOptions(orderID);
+        response.put("options", driverOptionJSONList);
         return response;
     }
 }

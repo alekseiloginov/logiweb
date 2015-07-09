@@ -120,8 +120,8 @@ public class TruckController {
     public Map<String, Object> getAllTruckOptions(Map requestParameters) {
         Map<String, Object> response = new HashMap<>();
 
-        String truckOptionList = optionService.getTruckOptions();
-        response.put("options", truckOptionList);
+        String truckOptionJSONList = optionService.getTruckOptions();
+        response.put("options", truckOptionJSONList);
         return response;
     }
 }

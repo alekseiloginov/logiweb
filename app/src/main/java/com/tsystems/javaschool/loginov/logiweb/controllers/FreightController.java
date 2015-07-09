@@ -1,7 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
 import com.tsystems.javaschool.loginov.logiweb.services.*;
-import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,12 +10,11 @@ import java.util.Map;
  * Homebrew MVC Controller implementation to work with the freight data.
  */
 public class FreightController {
-    static Logger logger = Logger.getLogger(FreightController.class);
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;
     private DeleteService deleteService;
-//    private OptionService optionService;
+    private OptionService optionService;
 
     public static final FreightController INSTANCE = new FreightController();
 
@@ -26,7 +24,7 @@ public class FreightController {
         saveService = SaveService.getInstance();
         updateService = UpdateService.getInstance();
         deleteService = DeleteService.getInstance();
-//        optionService = OptionService.getInstance();
+        optionService = OptionService.getInstance();
     }
 
     public static FreightController getInstance() { return INSTANCE; }
@@ -76,6 +74,21 @@ public class FreightController {
         Object savedFreight = saveService.saveFreight(name, weight, loadingLocation, unloadingLocation, status);
 
         response.put("datum", savedFreight);
+        return response;
+    }
+
+    /**
+     * Fetches all valid freight options using the OptionService and puts a returned JSON string to the response map.
+     */
+    @RequestInfo(value = "FreightOptions.do", method = "POST")
+    public Map<String, Object> getAllFreightOptions(Map requestParameters) {
+        int orderID = Integer.parseInt(((String[]) requestParameters.get("orderID"))[0]);
+        String city = ((String[]) requestParameters.get("city"))[0];
+
+        Map<String, Object> response = new HashMap<>();
+
+        String freightOptionJSONList = optionService.getFreightOptions(orderID, city);
+        response.put("options", freightOptionJSONList);
         return response;
     }
 

@@ -169,8 +169,6 @@ public class SaveService {
         driverQuery.setString("driverEmail", driverEmail);
         Driver driver = (Driver) driverQuery.uniqueResult();
 
-        // TODO handle situation when there is no more space for new drivers in a truck
-
         // assign an order truck to the driver and update in the database
         driver.setTruck(order.getTruck());
         session.update(driver);
@@ -228,5 +226,46 @@ public class SaveService {
         savedFreight.setUnloading(unloadingLocation);
 
         return savedFreight;
+    }
+
+    /**
+     * Saves a waypoint to the database and returns saved object.
+     */
+    public Object saveOrderWaypoint(int orderID, String waypointCity, String waypointFreightName) {
+
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        Query orderQuery = session.createQuery("from Order where id = :orderID");
+        orderQuery.setInteger("orderID", orderID);
+        Order order = (Order) orderQuery.uniqueResult();
+
+        // get a location object of the chosen city
+        Query locationQuery = session.createQuery("from Location where city = :waypointCity");
+        locationQuery.setString("waypointCity", waypointCity);
+        Location dbLocation = (Location) locationQuery.uniqueResult();
+        int locationID = dbLocation.getId();
+
+        // get a freight object of the chosen freight name
+        Query freightQuery = session.createQuery("from Freight where name = :waypointFreightName");
+        freightQuery.setString("waypointFreightName", waypointFreightName);
+        Freight dbFreight = (Freight) freightQuery.uniqueResult();
+        int FreightID = dbFreight.getId();
+
+        Query waypointQuery = session.createQuery("from Waypoint where location_id = :locationID and freight_id = :FreightID");
+        waypointQuery.setInteger("locationID", locationID);
+        waypointQuery.setInteger("FreightID", FreightID);
+        Waypoint waypoint = (Waypoint) waypointQuery.list().get(0);  // may be two similar freight in two similar cities!
+
+        // assign an waypoint to the order and update the order in the database
+        Set<Waypoint> waypointSet = order.getWaypoints();
+        waypointSet.add(waypoint);
+        order.setWaypoints(waypointSet);
+        session.update(order);
+
+        session.getTransaction().commit();
+
+        return waypoint;
     }
 }

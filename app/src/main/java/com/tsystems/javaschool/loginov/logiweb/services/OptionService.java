@@ -1,10 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
-import com.tsystems.javaschool.loginov.logiweb.models.Driver;
-import com.tsystems.javaschool.loginov.logiweb.models.Location;
-import com.tsystems.javaschool.loginov.logiweb.models.Order;
-import com.tsystems.javaschool.loginov.logiweb.models.Truck;
+import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,7 +24,7 @@ public class OptionService {
     public static OptionService getInstance() { return INSTANCE; }
 
     /**
-     * Fetches all valid truck options from the database and returns them as a JSON string.
+     * Fetches all valid truck options from the database and returns them as a JSON string suitable for JTable.
      */
     public String getTruckOptions() {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
@@ -81,7 +78,7 @@ public class OptionService {
     }
 
     /**
-     * Fetches all valid driver options from the database and returns them as a JSON string.
+     * Fetches all valid driver options from the database and returns them as a JSON string suitable for JTable.
      */
     public String getDriverOptions(int orderID) {
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
@@ -164,5 +161,141 @@ public class OptionService {
         }
 
         return driverOptionJSONList;
+    }
+
+    /**
+     * Fetches all valid freight options from the database and returns them as a JSON string suitable for JTable.
+     */
+    public String getFreightOptions(int orderID, String city) {
+
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        // get a location object of the chosen city
+        Query locationQuery = session.createQuery("from Location where city = :city");
+        locationQuery.setString("city", city);
+        Location dbLocation = (Location) locationQuery.uniqueResult();
+
+        int locationID = dbLocation.getId();
+
+        // get all waypoints connected with this city
+        Query waypointQuery = session.createQuery("from Waypoint where location_id = :locationID");
+        waypointQuery.setInteger("locationID", locationID);
+        List cityWaypointList = waypointQuery.list();
+
+        // fetch all orders from the database to check them for the chosen waypoints
+        List orderList = session.createQuery("from Order").list();
+
+        // Fetch the order with the given orderID from the database
+        Query orderQuery = session.createQuery("from Order where id = :orderID");
+        orderQuery.setInteger("orderID", orderID);
+        Order chosenOrder = (Order) orderQuery.uniqueResult();
+
+        session.getTransaction().commit();
+
+        // add all city waypoints to the validCityWaypointSet
+        Set<Waypoint> validCityWaypointSet = new HashSet<>();
+        Waypoint cityWaypointOption;
+        Order order;
+
+        for (Object cityWaypointObject : cityWaypointList) {
+            cityWaypointOption = (Waypoint) cityWaypointObject;
+            validCityWaypointSet.add(cityWaypointOption);
+
+            // if other orders already contain this cityWaypointOption, remove it from the validCityWaypointSet
+            for (Object orderObject : orderList) {
+                order = (Order) orderObject;
+
+                if (order.getWaypoints().contains(cityWaypointOption)) {
+                    validCityWaypointSet.remove(cityWaypointOption);
+                    break;
+                }
+            }
+        }
+
+        // get sum of all freight weights (loaded in the same city) that are already assign to the order's truck
+        Set<Waypoint> chosenOrderWaypointSet = chosenOrder.getWaypoints();
+        int orderAssignedFreightsWeight = 0;
+
+        for (Waypoint chosenOrderWaypoint : chosenOrderWaypointSet) {
+            if (chosenOrderWaypoint.getLocation().getCity().equals(city)
+                    && chosenOrderWaypoint.getOperation().equals("loading")) {
+                orderAssignedFreightsWeight += chosenOrderWaypoint.getFreight().getWeight();
+            }
+        }
+
+        // check that operation is loading, freight status is 'prepared' and there's enough space for this freight
+        int orderTruckCapacity = chosenOrder.getTruck().getCapacity();
+        int freeFreightWeight = orderTruckCapacity - orderAssignedFreightsWeight;
+        int freightWeight;
+
+        for (Waypoint validCityWaypointOption : validCityWaypointSet) {
+            freightWeight = validCityWaypointOption.getFreight().getWeight();
+
+            if (validCityWaypointOption.getOperation().equals("loading") &&
+                    validCityWaypointOption.getFreight().getStatus().equals("prepared") &&
+                    freeFreightWeight < freightWeight) {
+
+                validCityWaypointSet.remove(validCityWaypointOption);
+            }
+        }
+
+        // Creating a JSON string
+        int optionCount = 0;
+        String freightOptionJSONList = "[";
+
+        if (validCityWaypointSet.size() == 0) {
+            freightOptionJSONList += "]";
+
+        } else {
+            for (Waypoint validCityWaypoint : validCityWaypointSet) {
+                freightOptionJSONList += "{\"DisplayText\":\"";
+                freightOptionJSONList += validCityWaypoint.getFreight().getName();
+                freightOptionJSONList += "\",\"Value\":\"";
+                freightOptionJSONList += validCityWaypoint.getFreight().getName();
+                ++optionCount;
+
+                if (optionCount < validCityWaypointSet.size()) {
+                    freightOptionJSONList += "\"},";
+                } else {
+                    freightOptionJSONList += "\"}]";
+                }
+            }
+        }
+
+        return freightOptionJSONList;
+    }
+
+    /**
+     * Fetches all valid location options from the database and returns them as a JSON string suitable for JTable.
+     */
+    public String getLocationOptions() {
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        List locationList = session.createQuery("from Location").list();
+        session.getTransaction().commit();
+
+        // Creating a JSON string
+        int optionCount = 0;
+        String locationOptionJSONList = "[";
+
+        for (Object location : locationList) {
+            locationOptionJSONList += "{\"DisplayText\":\"";
+            locationOptionJSONList += ((Location) location).getCity();
+            locationOptionJSONList += "\",\"Value\":\"";
+            locationOptionJSONList += ((Location) location).getCity();
+            ++optionCount;
+
+            if (optionCount < locationList.size()) {
+                locationOptionJSONList += "\"},";
+            } else {
+                locationOptionJSONList += "\"}]";
+            }
+        }
+
+        return locationOptionJSONList;
     }
 }

@@ -82,11 +82,26 @@ public class ListService {
         session.beginTransaction();
 
         Query orderQuery = session.createQuery("from Order where id = :orderID");
-
         orderQuery.setInteger("orderID", orderID);
         Order order = (Order) orderQuery.uniqueResult();
         session.getTransaction().commit();
 
         return order.getDrivers();
+    }
+
+    /**
+     * Gets all waypoints for the provided order ID from the database and returns them as a set of waypoints.
+     */
+    public Set<Waypoint> getAllOrderWaypoints(int orderID) {
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        Query orderQuery = session.createQuery("from Order where id = :orderID");
+        orderQuery.setInteger("orderID", orderID);
+        Order order = (Order) orderQuery.uniqueResult();
+        session.getTransaction().commit();
+
+        return order.getWaypoints();
     }
 }
