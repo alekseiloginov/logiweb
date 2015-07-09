@@ -41,13 +41,15 @@ $(document).ready(function () {
             location: {
                 title: 'Location',
                 width: '40%',
+                options: 'LocationOptions.do',
                 display : function(data) {
                     return data.record.location.city;
-                },
-                input: function (data) {
-                    var city_truck = data.record ? data.record.location.city : "";
-                    return '<input type="text" name="location" value="' + city_truck + '" />';
                 }
+                //,
+                //input: function (data) {
+                //    var city_truck = data.record ? data.record.location.city : "";
+                //    return '<input type="text" name="location" value="' + city_truck + '" />';
+                //}
             }
         },
         formCreated: function (event, data) {

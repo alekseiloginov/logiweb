@@ -49,13 +49,15 @@ $(document).ready(function () {
             location: {
                 title: 'Location',
                 width: '15%',
+                options: 'LocationOptions.do',
                 display : function(data) {
                     return data.record.location.city;
-                },
-                input: function (data) {
-                    var city_driver = data.record ? data.record.location.city : "";
-                    return '<input type="text" name="location" value="' + city_driver + '" />';
                 }
+                //,
+                //input: function (data) {
+                //    var city_driver = data.record ? data.record.location.city : "";
+                //    return '<input type="text" name="location" value="' + city_driver + '" />';
+                //}
             },
             truck: {
                 title: 'Truck',

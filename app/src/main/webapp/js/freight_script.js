@@ -28,11 +28,13 @@ $(document).ready(function () {
             },
             loading: {
                 title: 'Loading',
-                width: '20%'
+                width: '20%',
+                options: 'LocationOptions.do'
             },
             unloading: {
                 title: 'Unloading',
-                width: '20%'
+                width: '20%',
+                options: 'LocationOptions.do'
             },
             status: {
                 title: 'Status',
