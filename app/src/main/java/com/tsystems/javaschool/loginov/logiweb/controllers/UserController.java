@@ -47,7 +47,7 @@ public class UserController {
 
             if (role.equals("manager")) {
                 response.put("page", "/WEB-INF/jsp/secure/manager/welcome.jsp");
-            } else {
+            } else if (role.equals("driver")) {
                 response.put("page", "/WEB-INF/jsp/secure/driver/welcome.jsp");
             }
 
@@ -107,10 +107,8 @@ public class UserController {
      */
     @RequestInfo(value = "Welcome.do", method = "GET")
     public Map<String, Object> redirectToWelcomePage(Map requestParameters) {
-//        String role = ((String[]) requestParameters.get("role"))[0];
+        String role = ((String[]) requestParameters.get("role"))[0];
         Map<String, Object> response = new HashMap<>();
-
-        String role = "manager"; // TODO add and check the hidden field from the redirected page via POST method
 
         if (role.equals("manager")) {
             response.put("page", "/WEB-INF/jsp/secure/manager/welcome.jsp");

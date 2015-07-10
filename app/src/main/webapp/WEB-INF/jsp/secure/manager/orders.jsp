@@ -18,7 +18,7 @@
     <a href="Trucks.do" title="Truck list">Trucks</a>
     <a href="Drivers.do" title="Driver list">Drivers</a>
     <a href="Freights.do" title="Freight list">Freights</a>
-    <a href="Welcome.do" title="Welcome page">Home</a>
+    <a href="Welcome.do?role=manager" title="Welcome page">Home</a>
 </nav>
 <br><br>
 
@@ -33,6 +33,6 @@
 <!-- jTable script file -->
 <script src="../../../../jtable/jquery.jtable.min.js" type="text/javascript"></script>
 <!-- My script file -->
-<script src="../../../../js/order_script.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/order_manager_script.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

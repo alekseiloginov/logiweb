@@ -5,7 +5,7 @@ $(document).ready(function () {
         title: 'Table of orders',
         sorting: true,
         actions: {
-            listAction: 'OrderList.do',
+            listAction: 'OrderList.do?role=manager',
             createAction: 'OrderSave.do',
             updateAction: 'OrderUpdate.do',
             deleteAction: 'OrderDelete.do'
@@ -13,7 +13,7 @@ $(document).ready(function () {
         fields: {
             id: {
                 key: true,
-                title: 'ID',
+                title: 'Order #',
                 width: '5%',
                 create: false,
                 edit: false
@@ -48,8 +48,8 @@ $(document).ready(function () {
                                     //    defaultValue: orderData.record.id
                                     //},
 
-                                    // Waypoint ID
                                     id: {
+                                        title: 'Waypoint #',
                                         key: true,
                                         create: false,
                                         edit: false,
@@ -139,12 +139,12 @@ $(document).ready(function () {
                                     //    defaultValue: orderData.record.id
                                     //},
 
-                                    // Driver ID
                                     id: {
+                                        title: 'Driver #',
+                                        width: '6%',
                                         key: true,
                                         create: false,
-                                        edit: false,
-                                        list: false
+                                        edit: false
                                     },
                                     name: {
                                         title: 'Name',

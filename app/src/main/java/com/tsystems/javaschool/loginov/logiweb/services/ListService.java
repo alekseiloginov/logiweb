@@ -104,4 +104,20 @@ public class ListService {
 
         return order.getWaypoints();
     }
+
+    /**
+     * Gets all orders for the provided driver ID from the database and returns them as a set of orders.
+     */
+    public List getAllDriverOrders(int truckID) {
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        Query orderQuery = session.createQuery("from Order where truck_id = :truckID");
+        orderQuery.setInteger("truckID", truckID);
+        List orderList = orderQuery.list();
+        session.getTransaction().commit();
+
+        return orderList;
+    }
 }

@@ -1,22 +1,18 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.models.*;
 import com.tsystems.javaschool.loginov.logiweb.services.DeleteService;
 import com.tsystems.javaschool.loginov.logiweb.services.ListService;
 import com.tsystems.javaschool.loginov.logiweb.services.SaveService;
 import com.tsystems.javaschool.loginov.logiweb.services.UpdateService;
-import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Homebrew MVC Controller implementation to work with the order data.
  */
 public class OrderController {
-    static Logger logger = Logger.getLogger(OrderController.class);
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;
@@ -39,14 +35,12 @@ public class OrderController {
      */
     @RequestInfo(value = "Orders.do", method = "GET")
     public Map<String, Object> redirectToOrderPage(Map requestParameters) {
-//        String role = ((String[]) requestParameters.get("role"))[0];
+        String role = ((String[]) requestParameters.get("role"))[0];
         Map<String, Object> response = new HashMap<>();
-
-        String role = "manager"; // TODO add and check the hidden field from the redirected page via POST method
 
         if (role.equals("manager")) {
             response.put("page", "/WEB-INF/jsp/secure/manager/orders.jsp");
-        } else {
+        } else if (role.equals("driver")) {
             response.put("page", "/WEB-INF/jsp/secure/driver/orders.jsp");
         }
         return response;
@@ -57,15 +51,24 @@ public class OrderController {
      */
     @RequestInfo(value = "OrderList.do", method = "POST")
     public Map<String, Object> getAllOrders(Map requestParameters) {
-        String sorting = null;
-
-        if (requestParameters.containsKey("jtSorting")) {
-            sorting = ((String[]) requestParameters.get("jtSorting"))[0];
-        }
+        String role = ((String[]) requestParameters.get("role"))[0];
+        List orderList = null;
 
         Map<String, Object> response = new HashMap<>();
 
-        List orderList = listService.getAllItems("Order", sorting);
+        if (role.equals("manager")) {
+            String sorting = null;
+            if (requestParameters.containsKey("jtSorting")) {
+                sorting = ((String[]) requestParameters.get("jtSorting"))[0];
+            }
+            orderList = listService.getAllItems("Order", sorting);
+
+        } else if (role.equals("driver")) {
+            int truckID = Integer.parseInt(((String[]) requestParameters.get("truckID"))[0]);
+            orderList = listService.getAllDriverOrders(truckID);
+        }
+
+        // if orderList != null ... else ...
         response.put("data", orderList);
         return response;
     }
