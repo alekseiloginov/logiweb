@@ -50,6 +50,7 @@ $(document).ready(function () {
                 title: 'Location',
                 width: '15%',
                 options: 'LocationOptions.do',
+                optionsSorting: 'text',
                 display : function(data) {
                     return data.record.location.city;
                 }

@@ -60,6 +60,7 @@ $(document).ready(function () {
                                         width: '15%',
                                         edit: false,
                                         options: 'LocationOptions.do',
+                                        optionsSorting: 'text',
                                         display : function(data) {
                                             return data.record.location.city;
                                         }
@@ -103,6 +104,7 @@ $(document).ready(function () {
                 title: 'Truck',
                 width: '10%',
                 options: 'TruckOptions.do',
+                optionsSorting: 'text',
                 display : function(data) {
                     return data.record.truck.plate_number;
                 }

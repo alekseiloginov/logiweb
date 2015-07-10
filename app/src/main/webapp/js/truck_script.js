@@ -42,6 +42,7 @@ $(document).ready(function () {
                 title: 'Location',
                 width: '40%',
                 options: 'LocationOptions.do',
+                optionsSorting: 'text',
                 display : function(data) {
                     return data.record.location.city;
                 }

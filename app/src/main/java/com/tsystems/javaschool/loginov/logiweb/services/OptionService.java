@@ -1,19 +1,24 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
+import com.google.maps.DirectionsApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsRoute;
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
 import com.tsystems.javaschool.loginov.logiweb.models.*;
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Fetches valid options to work with from the database.
  */
 public class OptionService {
+    static Logger logger = Logger.getLogger(OptionService.class);
 
     public static final OptionService INSTANCE = new OptionService();
 
@@ -60,17 +65,23 @@ public class OptionService {
         int optionCount = 0;
         String truckOptionJSONList = "[";
 
-        for (Truck validTruck : validTruckSet) {
-            truckOptionJSONList += "{\"DisplayText\":\"";
-            truckOptionJSONList += validTruck.getPlate_number();
-            truckOptionJSONList += "\",\"Value\":\"";
-            truckOptionJSONList += validTruck.getPlate_number();
-            ++optionCount;
+        if (validTruckSet.size() == 0) {
+            truckOptionJSONList += "]";
 
-            if (optionCount < validTruckSet.size()) {
-                truckOptionJSONList += "\"},";
-            } else {
-                truckOptionJSONList += "\"}]";
+        } else {
+
+            for (Truck validTruck : validTruckSet) {
+                truckOptionJSONList += "{\"DisplayText\":\"";
+                truckOptionJSONList += validTruck.getPlate_number();
+                truckOptionJSONList += "\",\"Value\":\"";
+                truckOptionJSONList += validTruck.getPlate_number();
+                ++optionCount;
+
+                if (optionCount < validTruckSet.size()) {
+                    truckOptionJSONList += "\"},";
+                } else {
+                    truckOptionJSONList += "\"}]";
+                }
             }
         }
 
@@ -124,18 +135,88 @@ public class OptionService {
         Set<Driver> validDriverSet = new HashSet<>();
         Driver driverInCity;
 
-        // TODO handle situation when driversInCity == null
-        if (driversInCity != null) {
+        // TODO handle situation when driversInCity == null  AND  order.getWaypoints() == null
+        if (driversInCity != null && order.getWaypoints() != null) {
+
+            // get all cities associated with this order and put them to the city set (excluding the origin city)
+            Set<Waypoint> orderWaypointSet = order.getWaypoints();
+            Set<String> citySet = new HashSet<>();
+
+            for (Waypoint orderWaypoint : orderWaypointSet) {
+
+                if (!orderWaypoint.getLocation().getCity().equals(orderTruckCity)) {
+                    citySet.add( orderWaypoint.getLocation().getCity() );
+                }
+            }
+
+            // create a string of collected cities to use in Google Maps API
+            String waypointCities = "optimize:true";
+
+            for (String city : citySet) {
+                waypointCities += "|" + city;
+            }
+
+            // Google Maps API implementation
+
+            GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAPisnyi8SzMCy1NAZd7XMA6YBWYlFF9w4");
+            DirectionsRoute[] routes = new DirectionsRoute[0];
+
+            try {
+                routes = DirectionsApi.newRequest(context)
+                        .origin(orderTruckCity)                 // origin - city where the order's truck is located
+                        .destination(orderTruckCity)
+                        .optimizeWaypoints(true)
+                        .waypoints(waypointCities)
+                        .await();
+            } catch (Exception e) {
+                logger.error("Problem with the routes request using Google Maps API.", e);
+            }
+
+            DirectionsLeg[] legs = routes[0].legs;
+            long durationInSeconds = 0;
+
+            for (DirectionsLeg leg : legs) {
+                durationInSeconds += leg.duration.inSeconds;
+            }
+
+            long orderDurationInHoursLong = Math.round(durationInSeconds / 60.0 / 60.0);
+            int orderDurationInHoursInThisMonthInt = (int) orderDurationInHoursLong;
+
+            // Check month changes during the order, start - this moment (if it start later - it'll pass too)
+
+            // Start of the order DATE:TIME
+            Date orderStartDate = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(orderStartDate);
+            int orderStartMonth = cal.get(Calendar.MONTH);
+            long orderStartLong = orderStartDate.getTime();
+
+            // Start of a new month DATE:TIME
+            Date date = new Date();
+            cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.MONTH, orderStartMonth + 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            Date startOfTheNextMonthDate = cal.getTime();
+            long startOfTheNextMonthLong = startOfTheNextMonthDate.getTime();
+            long diffInMilliesLong = startOfTheNextMonthLong - orderStartLong;
+            long diffInHoursLong = TimeUnit.HOURS.convert(diffInMilliesLong, TimeUnit.MILLISECONDS);
+
+            if (diffInHoursLong < orderDurationInHoursLong) {
+                orderDurationInHoursInThisMonthInt = (int) diffInHoursLong;
+            }
+
             for (Object driverObject : driversInCity) {
                 driverInCity = (Driver) driverObject;
 
-                // check driversInCity list for if the driver is FREE + the driver's truck is NULL + worked_hours <= 176
-                // TODO add an estimate shift time (G.maps API) + month's worked_hours check and month changes during the shift
-                // TODO replace "0" with the estimate shift time in this month
-                int estimateShiftTimeInThisMonth = 0;
-
+                // check if the driver is FREE + driver's truck is NULL + driver's worked hours in this month <= 176
                 if (driverInCity.getTruck() == null &&
-                        driverInCity.getWorked_hours() <= (176 - estimateShiftTimeInThisMonth)) {
+                        (driverInCity.getWorked_hours() + orderDurationInHoursInThisMonthInt) <= 176) {
 
                     validDriverSet.add(driverInCity);
                 }
@@ -146,17 +227,23 @@ public class OptionService {
         int optionCount = 0;
         String driverOptionJSONList = "[";
 
-        for (Driver validDriver : validDriverSet) {
-            driverOptionJSONList += "{\"DisplayText\":\"";
-            driverOptionJSONList += validDriver.getEmail();
-            driverOptionJSONList += "\",\"Value\":\"";
-            driverOptionJSONList += validDriver.getEmail();
-            ++optionCount;
+        if (validDriverSet.size() == 0) {
+            driverOptionJSONList += "]";
 
-            if (optionCount < validDriverSet.size()) {
-                driverOptionJSONList += "\"},";
-            } else {
-                driverOptionJSONList += "\"}]";
+        } else {
+
+            for (Driver validDriver : validDriverSet) {
+                driverOptionJSONList += "{\"DisplayText\":\"";
+                driverOptionJSONList += validDriver.getEmail();
+                driverOptionJSONList += "\",\"Value\":\"";
+                driverOptionJSONList += validDriver.getEmail();
+                ++optionCount;
+
+                if (optionCount < validDriverSet.size()) {
+                    driverOptionJSONList += "\"},";
+                } else {
+                    driverOptionJSONList += "\"}]";
+                }
             }
         }
 
@@ -282,20 +369,25 @@ public class OptionService {
         int optionCount = 0;
         String locationOptionJSONList = "[";
 
-        for (Object location : locationList) {
-            locationOptionJSONList += "{\"DisplayText\":\"";
-            locationOptionJSONList += ((Location) location).getCity();
-            locationOptionJSONList += "\",\"Value\":\"";
-            locationOptionJSONList += ((Location) location).getCity();
-            ++optionCount;
+        if (locationList.size() == 0) {
+            locationOptionJSONList += "]";
 
-            if (optionCount < locationList.size()) {
-                locationOptionJSONList += "\"},";
-            } else {
-                locationOptionJSONList += "\"}]";
+        } else {
+
+            for (Object location : locationList) {
+                locationOptionJSONList += "{\"DisplayText\":\"";
+                locationOptionJSONList += ((Location) location).getCity();
+                locationOptionJSONList += "\",\"Value\":\"";
+                locationOptionJSONList += ((Location) location).getCity();
+                ++optionCount;
+
+                if (optionCount < locationList.size()) {
+                    locationOptionJSONList += "\"},";
+                } else {
+                    locationOptionJSONList += "\"}]";
+                }
             }
         }
-
         return locationOptionJSONList;
     }
 }

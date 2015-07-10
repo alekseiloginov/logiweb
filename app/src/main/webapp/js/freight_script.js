@@ -29,12 +29,14 @@ $(document).ready(function () {
             loading: {
                 title: 'Loading',
                 width: '20%',
-                options: 'LocationOptions.do'
+                options: 'LocationOptions.do',
+                optionsSorting: 'text'
             },
             unloading: {
                 title: 'Unloading',
                 width: '20%',
-                options: 'LocationOptions.do'
+                options: 'LocationOptions.do',
+                optionsSorting: 'text'
             },
             status: {
                 title: 'Status',
