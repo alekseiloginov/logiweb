@@ -7,7 +7,7 @@
 </head>
 <body>
 
-// If driver's truck_id is null, don't show a link to his orders because he have no yet.
+<%--If driver's truck_id is null, don't show a link to his orders because he have no yet.--%>
 <c:choose>
     <c:when test="${empty sessionScope.user.getTruck().getId()}">
         <nav>
