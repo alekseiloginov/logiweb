@@ -28,14 +28,14 @@ $(document).ready(function () {
                 width: '15%'
             },
             capacity: {
-                title: 'Capacity',
+                title: 'Capacity (tons)',
                 width: '10%'
             },
             drivable: {
                 title: 'Drivable',
                 width: '10%',
                 type: 'radiobutton',
-                options: { '1': 'Yes', '0': 'No' },
+                options: { '1': '✔', '0': '✘' },
                 defaultValue: '1'
             },
             location: {
@@ -54,12 +54,21 @@ $(document).ready(function () {
             }
         },
         formCreated: function (event, data) {
-            var $dialogDiv = data.form.closest('.ui-dialog');
-            $dialogDiv.position({
-                my: "top",
-                at: "top",
-                of: window
+
+            // THIS BLOCK FOR PRESENTATION ONLY
+            $( "button" ).click(function() {
+                //event.preventDefault();
+                $( "#Edit-plate_number" ).val( "YZ09876" );
+                $( "#Edit-driver_number" ).val( "2" );
+                $( "#Edit-capacity" ).val( "3" );
             });
+
+            //var $dialogDiv = data.form.closest('.ui-dialog');
+            //$dialogDiv.position({
+            //    my: "top",
+            //    at: "top",
+            //    of: window
+            //});
         }
     }).jtable('load');
 });

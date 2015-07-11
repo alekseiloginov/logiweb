@@ -14,7 +14,7 @@ $(document).ready(function () {
             id: {
                 key: true,
                 title: 'ID',
-                width: '10%',
+                width: '6%',
                 create: false,
                 edit: false
             },
@@ -23,8 +23,8 @@ $(document).ready(function () {
                 width: '20%'
             },
             weight: {
-                title: 'Weight',
-                width: '10%'
+                title: 'Weight (kilos)',
+                width: '15%'
             },
             loading: {
                 title: 'Loading',
@@ -40,7 +40,7 @@ $(document).ready(function () {
             },
             status: {
                 title: 'Status',
-                width: '20%',
+                width: '15%',
                 type: 'radiobutton',
                 options: { 'prepared': 'prepared', 'shipped': 'shipped', 'delivered': 'delivered' },
                 defaultValue: 'prepared'

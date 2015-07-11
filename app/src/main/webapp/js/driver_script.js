@@ -73,12 +73,24 @@ $(document).ready(function () {
             }
         },
         formCreated: function (event, data) {
-            var $dialogDiv = data.form.closest('.ui-dialog');
-            $dialogDiv.position({
-                my: "top",
-                at: "top",
-                of: window
+
+            // THIS BLOCK FOR PRESENTATION ONLY
+            $( "button" ).click(function() {
+                //event.preventDefault();
+                $( "#Edit-name" ).val( "Vasya" );
+                $( "#Edit-surname" ).val( "Pupkin" );
+                $( "#Edit-email" ).val( "vas@abc.com" );
+                $( "#Edit-password" ).val( "1234" );
+                $( "#Edit-worked_hours" ).val( "50" );
+                $( "#Edit-truck" ).val( "DE98765" );
             });
+
+            //var $dialogDiv = data.form.closest('.ui-dialog');
+            //$dialogDiv.position({
+            //    my: "top",
+            //    at: "top",
+            //    of: window
+            //});
         }
     }).jtable('load');
 });

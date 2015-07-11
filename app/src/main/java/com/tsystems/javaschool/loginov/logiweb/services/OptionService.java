@@ -312,15 +312,16 @@ public class OptionService {
             }
         }
 
-        // check that operation is loading, freight status is 'prepared' and there's enough space for this freight
-        int orderTruckCapacity = chosenOrder.getTruck().getCapacity();
-        int freeFreightWeight = orderTruckCapacity - orderAssignedFreightsWeight;
+        // check that if operation is loading and freight status is 'prepared' - there's enough space for this freight
+        int orderTruckCapacityInTones = chosenOrder.getTruck().getCapacity();
+        int freeFreightWeight = (orderTruckCapacityInTones * 1000) - orderAssignedFreightsWeight;  // convert to kilos
         int freightWeight;
 
         for (Waypoint validCityWaypointOption : validCityWaypointSet) {
             freightWeight = validCityWaypointOption.getFreight().getWeight();
 
-            if (validCityWaypointOption.getOperation().equals("loading") &&
+            if (!validCityWaypointOption.getFreight().getStatus().equals("prepared") ||
+                    validCityWaypointOption.getOperation().equals("loading") &&
                     validCityWaypointOption.getFreight().getStatus().equals("prepared") &&
                     freeFreightWeight < freightWeight) {
 

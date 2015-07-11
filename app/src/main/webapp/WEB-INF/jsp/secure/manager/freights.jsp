@@ -17,7 +17,7 @@
 <nav>
   <a href="Trucks.do" title="Truck list">Trucks</a>
   <a href="Drivers.do" title="Driver list">Drivers</a>
-  <a href="Orders.do" title="Order list">Orders</a>
+  <a href="Orders.do?role=manager" title="Order list">Orders</a>
   <a href="Welcome.do?role=manager" title="Welcome page">Home</a>
 </nav>
 <br><br>
