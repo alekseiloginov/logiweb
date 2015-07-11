@@ -58,11 +58,11 @@ public class Driver {
     @Column(name = "last_modified_time")
     private Date last_modified_time;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "truck_id")
     private Truck truck;
 

@@ -48,7 +48,7 @@ public class Truck {
     @Column(name = "last_modified_time")
     private Date last_modified_time;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
