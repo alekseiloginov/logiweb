@@ -68,7 +68,6 @@ public class OrderController {
             orderList = listService.getAllDriverOrders(truckID);
         }
 
-        // if orderList != null ... else ...
         response.put("data", orderList);
         return response;
     }
