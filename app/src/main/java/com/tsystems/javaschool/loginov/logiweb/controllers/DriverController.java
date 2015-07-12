@@ -1,6 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.services.*;
 import org.apache.log4j.Logger;
@@ -87,6 +88,9 @@ public class DriverController {
         } catch (DuplicateEntryException e) {
             logger.error("Duplicate entry: " + email, e);
             response.put("jTableError", "Email should be unique and this one is already present in the database.");
+        } catch (PlateNumberNotFoundException e) {
+            logger.error("Plate number not found: " + plate_number, e);
+            response.put("jTableError", "No truck with the entered plate number, add it first.");
         }
 
         return response;
@@ -117,6 +121,9 @@ public class DriverController {
         } catch (DuplicateEntryException e) {
             logger.error("Duplicate entry: " + email, e);
             response.put("jTableError", "Email should be unique and this one is already present in the database.");
+        } catch (PlateNumberNotFoundException e) {
+            logger.error("Plate number not found: " + plate_number, e);
+            response.put("jTableError", "No truck with the entered plate number, add it first.");
         }
 
         return response;

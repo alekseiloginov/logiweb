@@ -135,7 +135,6 @@ public class OptionService {
         Set<Driver> validDriverSet = new HashSet<>();
         Driver driverInCity;
 
-        // TODO handle situation when driversInCity == null  AND  order.getWaypoints() == null
         if (driversInCity != null && order.getWaypoints() != null) {
 
             // get all cities associated with this order and put them to the city set (excluding the origin city)

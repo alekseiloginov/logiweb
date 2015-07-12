@@ -3,6 +3,7 @@ package com.tsystems.javaschool.loginov.logiweb.services;
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -101,7 +102,8 @@ public class UpdateService {
      * Updates a driver in the database.
      */
     public Object updateDriver(int id, String name, String surname, String email, String password, int worked_hours,
-                             String status, String city, String plate_number) throws DuplicateEntryException {
+                             String status, String city, String plate_number)
+            throws DuplicateEntryException, PlateNumberNotFoundException {
 
         logger.info("ID of the driver to update: " + id);
 
@@ -142,7 +144,8 @@ public class UpdateService {
         Truck dbTruck = (Truck) truckQuery.uniqueResult();
 
         if (dbTruck == null) {
-            // show message "no truck with the entered plate number, add it first"
+            throw new PlateNumberNotFoundException("Entered plate number is not found in the database",
+                    "Plate number not found");
         }
 
         Query driverQuery = session.createQuery("from Driver where id = :id");

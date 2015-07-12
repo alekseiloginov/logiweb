@@ -3,6 +3,7 @@ package com.tsystems.javaschool.loginov.logiweb.services;
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberNotFoundException;
 import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -89,7 +90,8 @@ public class SaveService {
      * Saves a driver to the database and returns saved object.
      */
     public Object saveDriver(String name, String surname, String email, String password, int worked_hours,
-                             String status, String city, String plate_number) throws DuplicateEntryException {
+                             String status, String city, String plate_number)
+            throws DuplicateEntryException, PlateNumberNotFoundException {
 
         SessionFactory sessionFactory = AuthDao.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
@@ -142,7 +144,8 @@ public class SaveService {
         Truck dbTruck = (Truck) truckQuery.uniqueResult();
 
         if (dbTruck == null) {
-            // show message "no truck with the entered plate number, add it first"
+            throw new PlateNumberNotFoundException("Entered plate number is not found in the database",
+                    "Plate number not found");
         }
 
         Driver driver = new Driver(name, surname, email, encryptedPassword, worked_hours, status, dbLocation, dbTruck);

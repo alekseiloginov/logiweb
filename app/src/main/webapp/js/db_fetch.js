@@ -80,7 +80,7 @@ $("form").submit(function(event) {
         type : "POST",
 
         success : function(response) {
-            // TODO update the truck table
+            // update the truck table
             $("#someId").html("<p>New truck added.</p>");
         },
 
