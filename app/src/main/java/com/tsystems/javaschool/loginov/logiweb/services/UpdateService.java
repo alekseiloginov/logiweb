@@ -1,6 +1,8 @@
 package com.tsystems.javaschool.loginov.logiweb.services;
 
 import com.tsystems.javaschool.loginov.logiweb.dao.AuthDao;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
 import com.tsystems.javaschool.loginov.logiweb.models.*;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -28,7 +30,13 @@ public class UpdateService {
     /**
      * Updates a truck in the database.
      */
-    public Object updateTruck(int id, String plate_number, int driver_number, int capacity, int drivable, String city) {
+    public Object updateTruck(int id, String plate_number, int driver_number, int capacity, int drivable, String city)
+            throws PlateNumberIncorrectException, DuplicateEntryException {
+
+        if (!plate_number.matches("^[a-zA-Z]{2}[0-9]{5}$")) {
+            throw new PlateNumberIncorrectException("Plate number should contain 2 letters and 5 digits",
+                    "Plate number incorrect");
+        }
 
         logger.info("ID of the truck to update: " + id);
 
@@ -36,7 +44,19 @@ public class UpdateService {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
-        // TODO add plate_number check
+        // Plate number database check for uniqueness
+        Query truckCheckQuery = session.createQuery("from Truck where plate_number = :plate_number");
+        truckCheckQuery.setString("plate_number", plate_number);
+        Truck checkedTruck = (Truck) truckCheckQuery.uniqueResult();
+        session.getTransaction().commit();
+
+        if (checkedTruck != null) {
+            throw new DuplicateEntryException("Plate number is unique and this one is already present in the database",
+                    "Duplicate entry");
+        }
+
+        session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
 
         Query locationQuery = session.createQuery("from Location where city = :city");
         locationQuery.setString("city", city);
@@ -74,7 +94,22 @@ public class UpdateService {
      * Updates a driver in the database.
      */
     public Object updateDriver(int id, String name, String surname, String email, String password, int worked_hours,
-                             String status, String city, String plate_number) {
+                             String status, String city, String plate_number) throws DuplicateEntryException {
+
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+
+        // Email database check for uniqueness
+        Query driverCheckQuery = session.createQuery("from Driver where email = :email");
+        driverCheckQuery.setString("email", email);
+        Driver checkedDriver = (Driver) driverCheckQuery.uniqueResult();
+        session.getTransaction().commit();
+
+        if (checkedDriver != null) {
+            throw new DuplicateEntryException("Email is unique and this one is already present in the database",
+                    "Duplicate entry");
+        }
 
         logger.info("ID of the driver to update: " + id);
 
@@ -95,11 +130,8 @@ public class UpdateService {
         }
 
         // DB update
-        SessionFactory sessionFactory = AuthDao.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
+        session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-
-        // TODO add email check
 
         Query locationQuery = session.createQuery("from Location where city = :city");
         locationQuery.setString("city", city);

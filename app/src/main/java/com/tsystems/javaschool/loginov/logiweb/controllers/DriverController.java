@@ -1,5 +1,6 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
 import com.tsystems.javaschool.loginov.logiweb.models.Driver;
 import com.tsystems.javaschool.loginov.logiweb.services.*;
 import org.apache.log4j.Logger;
@@ -78,10 +79,16 @@ public class DriverController {
 
         Map<String, Object> response = new HashMap<>();
 
-        Object savedDriver =
-                saveService.saveDriver(name, surname, email, password, worked_hours, status, city, plate_number);
+        try {
+            Object savedDriver =
+                    saveService.saveDriver(name, surname, email, password, worked_hours, status, city, plate_number);
+            response.put("datum", savedDriver);
 
-        response.put("datum", savedDriver);
+        } catch (DuplicateEntryException e) {
+            logger.error("Duplicate entry: " + email, e);
+            response.put("jTableError", "Email should be unique and this one is already present in the database.");
+        }
+
         return response;
     }
 
@@ -102,10 +109,16 @@ public class DriverController {
 
         Map<String, Object> response = new HashMap<>();
 
-        Object updatedDriver = updateService.updateDriver(id, name, surname, email, password,
-                worked_hours, status, city, plate_number);
+        try {
+            Object updatedDriver = updateService.updateDriver(id, name, surname, email, password,
+                                                                worked_hours, status, city, plate_number);
+            response.put("datum", updatedDriver);
 
-        response.put("datum", updatedDriver);
+        } catch (DuplicateEntryException e) {
+            logger.error("Duplicate entry: " + email, e);
+            response.put("jTableError", "Email should be unique and this one is already present in the database.");
+        }
+
         return response;
     }
 

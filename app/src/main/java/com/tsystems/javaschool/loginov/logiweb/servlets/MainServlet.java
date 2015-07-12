@@ -47,6 +47,17 @@ public class MainServlet extends HttpServlet {
                 session.setAttribute("user", user);
             }
 
+            // Error for JTable: Operation with the database failed ("ERROR" in response)
+            if (resultMap.containsKey("jTableError")) {
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                // JSON object for JTable to parse
+                String response = "{\"Result\":\"ERROR\",\"Message\":\"" + resultMap.get("jTableError") + "\"}";
+                resp.getWriter().write(response);
+                logger.info("JSON response = " + response);
+                return;
+            }
+
             Gson gson = new Gson();
 
             // JSON for JTable: List of items fetched from the db ("Records" in response)
@@ -54,18 +65,9 @@ public class MainServlet extends HttpServlet {
                 Object data = resultMap.get("data");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                String response;
-
-                try {
-                    // Create a JSON object for JTable to parse
-                    response = "{\"Result\":\"OK\",\"Records\":" + gson.toJson(data) + "}";
-                    logger.info("JSON response = " + response);
-                } catch (Exception e) {
-                    String error = "Data conversion into JSON object problem.";
-                    response = "{\"Result\":\"ERROR\",\"Message\":" + error + "}";
-//                response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
-                    logger.error(error, e);
-                }
+                // Create a JSON object for JTable to parse
+                String response = "{\"Result\":\"OK\",\"Records\":" + gson.toJson(data) + "}";
+                logger.info("JSON response = " + response);
                 resp.getWriter().write(response);
                 return;
             }
@@ -85,8 +87,7 @@ public class MainServlet extends HttpServlet {
                     logger.info("JSON response = " + response);
                 } catch (Exception e) {
                     String error = "Datum conversion into JSON object problem.";
-                    response = "{\"Result\":\"ERROR\",\"Message\":" + error + "}";
-//                    response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
+                    response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
                     logger.error(error, e);
                 }
                 resp.getWriter().write(response);
@@ -118,8 +119,7 @@ public class MainServlet extends HttpServlet {
                     logger.info("JSON response = " + response);
                 } catch (Exception e) {
                     String error = "Data conversion into JSON object problem.";
-                    response = "{\"Result\":\"ERROR\",\"Message\":" + error + "}";
-//                response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
+                    response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
                     logger.error(error, e);
                 }
                 resp.getWriter().write(response);
@@ -167,17 +167,6 @@ public class MainServlet extends HttpServlet {
             if (resultMap.containsKey("page")) {
                 resultPage = (String) resultMap.get("page");
             }
-
-//            if (resultMap.containsKey("data")) {
-//                Object data = resultMap.get("data");
-//                resp.setContentType("application/json");
-//                resp.setCharacterEncoding("UTF-8");
-//                String response = new Gson().toJson(data);
-//                String finalResponse = "{\"Result\":\"OK\",\"Records\":" + response + "}";
-////                String finalResponse = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
-//                resp.getWriter().write(finalResponse);
-//                return;
-//            }
         }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(resultPage);

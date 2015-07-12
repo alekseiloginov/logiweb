@@ -1,5 +1,7 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
+import com.tsystems.javaschool.loginov.logiweb.exceptions.DuplicateEntryException;
+import com.tsystems.javaschool.loginov.logiweb.exceptions.PlateNumberIncorrectException;
 import com.tsystems.javaschool.loginov.logiweb.services.*;
 import org.apache.log4j.Logger;
 
@@ -73,9 +75,18 @@ public class TruckController {
 
         Map<String, Object> response = new HashMap<>();
 
-        Object savedTruck = saveService.saveTruck(plate_number, driver_number, capacity, drivable, city);
+        try {
+            Object savedTruck = saveService.saveTruck(plate_number, driver_number, capacity, drivable, city);
+            response.put("datum", savedTruck);
 
-        response.put("datum", savedTruck);
+        } catch (PlateNumberIncorrectException e) {
+            logger.error("Plate number incorrect: " + plate_number, e);
+            response.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
+        } catch (DuplicateEntryException e) {
+            logger.error("Duplicate entry: " + plate_number, e);
+            response.put("jTableError", "Plate number is unique and this one is already present in the database.");
+        }
+
         return response;
     }
 
@@ -93,9 +104,18 @@ public class TruckController {
 
         Map<String, Object> response = new HashMap<>();
 
-        Object updatedTruck = updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
+        try {
+            Object updatedTruck = updateService.updateTruck(id, plate_number, driver_number, capacity, drivable, city);
+            response.put("datum", updatedTruck);
 
-        response.put("datum", updatedTruck);
+        } catch (PlateNumberIncorrectException e) {
+            logger.error("Plate number incorrect: " + plate_number, e);
+            response.put("jTableError", "Plate number should contain 2 letters and 5 digits.");
+        } catch (DuplicateEntryException e) {
+            logger.error("Duplicate entry: " + plate_number, e);
+            response.put("jTableError", "Plate number is unique and this one is already present in the database.");
+        }
+
         return response;
     }
 
