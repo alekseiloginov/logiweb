@@ -143,7 +143,9 @@ public class UpdateService {
         truckQuery.setString("plate_number", plate_number);
         Truck dbTruck = (Truck) truckQuery.uniqueResult();
 
-        if (dbTruck == null) {
+        // plate number can be empty, we don't need to throw exception in that case
+        if (!plate_number.isEmpty() && dbTruck == null) {
+            session.getTransaction().commit();
             throw new PlateNumberNotFoundException("Entered plate number is not found in the database",
                     "Plate number not found");
         }
