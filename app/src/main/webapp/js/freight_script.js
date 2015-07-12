@@ -20,11 +20,13 @@ $(document).ready(function () {
             },
             name: {
                 title: 'Title',
-                width: '20%'
+                width: '20%',
+                inputClass: 'validate[required]'
             },
             weight: {
                 title: 'Weight (kilos)',
-                width: '15%'
+                width: '15%',
+                inputClass: 'validate[required]'
             },
             loading: {
                 title: 'Loading',
@@ -47,12 +49,19 @@ $(document).ready(function () {
             }
         },
         formCreated: function (event, data) {
-            var $dialogDiv = data.form.closest('.ui-dialog');
-            $dialogDiv.position({
-                my: "top",
-                at: "top",
-                of: window
+            //Initialize validation logic when a form is created
+            data.form.validationEngine('attach', {
+                promptPosition: "bottomLeft"
             });
+        },
+        formSubmitting: function (event, data) {
+            //Validate form when it is being submitted
+            return data.form.validationEngine('validate');
+        },
+        formClosed: function (event, data) {
+            //Dispose validation logic when form is closed
+            data.form.validationEngine('hide');
+            data.form.validationEngine('detach');
         }
     }).jtable('load');
 });

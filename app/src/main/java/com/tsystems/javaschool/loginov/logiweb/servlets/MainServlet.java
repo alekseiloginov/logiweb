@@ -74,22 +74,12 @@ public class MainServlet extends HttpServlet {
 
             // JSON for JTable: One item fetched from the db ("Record" in response)
             if (resultMap.containsKey("datum")) {
-
-                // TODO add check if resultMap contains any errors that we added after catch, like MySQLIntegrityConstraintViolationException: Duplicate entry
                 Object datum = resultMap.get("datum");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                String response;
-
-                try {
-                    // Create a JSON object for JTable to parse
-                    response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
-                    logger.info("JSON response = " + response);
-                } catch (Exception e) {
-                    String error = "Datum conversion into JSON object problem.";
-                    response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
-                    logger.error(error, e);
-                }
+                // Create a JSON object for JTable to parse
+                String response = "{\"Result\":\"OK\",\"Record\":" + gson.toJson(datum) + "}";
+                logger.info("JSON response = " + response);
                 resp.getWriter().write(response);
                 return;
             }
@@ -100,7 +90,6 @@ public class MainServlet extends HttpServlet {
                 resp.setCharacterEncoding("UTF-8");
                 // JSON object for JTable to parse
                 String response = "{\"Result\":\"OK\"}";
-//                String response = "{\"Result\":\"ERROR\",\"Message\":\""+ "error message" + "\"}";
                 resp.getWriter().write(response);
                 logger.info("JSON response = " + response);
                 return;
@@ -111,17 +100,9 @@ public class MainServlet extends HttpServlet {
                 Object options = resultMap.get("options");
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
-                String response;
-
-                try {
-                    // Create a JSON object for JTable to parse
-                    response = "{\"Result\":\"OK\",\"Options\":" + options + "}";
-                    logger.info("JSON response = " + response);
-                } catch (Exception e) {
-                    String error = "Data conversion into JSON object problem.";
-                    response = "{\"Result\":\"ERROR\",\"Message\":\""+ error + "\"}";
-                    logger.error(error, e);
-                }
+                // Create a JSON object for JTable to parse
+                String response = "{\"Result\":\"OK\",\"Options\":" + options + "}";
+                logger.info("JSON response = " + response);
                 resp.getWriter().write(response);
                 return;
             }

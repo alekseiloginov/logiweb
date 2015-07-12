@@ -21,15 +21,18 @@ $(document).ready(function () {
             },
             plate_number: {
                 title: 'Plate number',
-                width: '25%'
+                width: '25%',
+                inputClass: 'validate[required]'
             },
             driver_number: {
                 title: 'Driver number',
-                width: '15%'
+                width: '15%',
+                inputClass: 'validate[required]'
             },
             capacity: {
                 title: 'Capacity (tons)',
-                width: '10%'
+                width: '10%',
+                inputClass: 'validate[required]'
             },
             drivable: {
                 title: 'Drivable',
@@ -54,6 +57,10 @@ $(document).ready(function () {
             }
         },
         formCreated: function (event, data) {
+            //Initialize validation logic when a form is created
+            data.form.validationEngine('attach', {
+                promptPosition: "bottomLeft"
+            });
 
             // THIS BLOCK FOR PRESENTATION ONLY
             $( "button" ).click(function() {
@@ -62,13 +69,15 @@ $(document).ready(function () {
                 $( "#Edit-driver_number" ).val( "2" );
                 $( "#Edit-capacity" ).val( "3" );
             });
-
-            //var $dialogDiv = data.form.closest('.ui-dialog');
-            //$dialogDiv.position({
-            //    my: "top",
-            //    at: "top",
-            //    of: window
-            //});
+        },
+        formSubmitting: function (event, data) {
+            //Validate form when it is being submitted
+            return data.form.validationEngine('validate');
+        },
+        formClosed: function (event, data) {
+            //Dispose validation logic when form is closed
+            data.form.validationEngine('hide');
+            data.form.validationEngine('detach');
         }
     }).jtable('load');
 });

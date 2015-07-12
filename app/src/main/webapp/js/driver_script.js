@@ -19,25 +19,30 @@ $(document).ready(function () {
             },
             name: {
                 title: 'Name',
-                width: '10%'
+                width: '10%',
+                inputClass: 'validate[required]'
             },
             surname: {
                 title: 'Surname',
-                width: '15%'
+                width: '15%',
+                inputClass: 'validate[required]'
             },
             email: {
                 title: 'Email',
-                width: '20%'
+                width: '20%',
+                inputClass: 'validate[required,custom[email]]'
             },
             password: {
                 title: 'Password',
                 type: 'password',
                 width: '10%',
+                inputClass: 'validate[required]',
                 list: false
             },
             worked_hours: {
                 title: 'Worked hours',
-                width: '12%'
+                width: '12%',
+                inputClass: 'validate[required]'
             },
             status: {
                 title: 'Status',
@@ -73,6 +78,10 @@ $(document).ready(function () {
             }
         },
         formCreated: function (event, data) {
+            //Initialize validation logic when a form is created
+            data.form.validationEngine('attach', {
+                promptPosition: "bottomLeft"
+            });
 
             // THIS BLOCK FOR PRESENTATION ONLY
             $( "button" ).click(function() {
@@ -84,13 +93,15 @@ $(document).ready(function () {
                 $( "#Edit-worked_hours" ).val( "50" );
                 $( "#Edit-truck" ).val( "DE98765" );
             });
-
-            //var $dialogDiv = data.form.closest('.ui-dialog');
-            //$dialogDiv.position({
-            //    my: "top",
-            //    at: "top",
-            //    of: window
-            //});
+        },
+        formSubmitting: function (event, data) {
+            //Validate form when it is being submitted
+            return data.form.validationEngine('validate');
+        },
+        formClosed: function (event, data) {
+            //Dispose validation logic when form is closed
+            data.form.validationEngine('hide');
+            data.form.validationEngine('detach');
         }
     }).jtable('load');
 });

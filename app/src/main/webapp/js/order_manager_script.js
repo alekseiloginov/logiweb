@@ -197,14 +197,6 @@ $(document).ready(function () {
                 options: { '1': 'Yes', '0': 'No' },
                 defaultValue: '0'
             }
-        },
-        formCreated: function (event, data) {
-            var $dialogDiv = data.form.closest('.ui-dialog');
-            $dialogDiv.position({
-                my: "top",
-                at: "top",
-                of: window
-            });
         }
     }).jtable('load');
 });
