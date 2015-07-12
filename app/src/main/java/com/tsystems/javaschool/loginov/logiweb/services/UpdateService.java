@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,20 +45,6 @@ public class UpdateService {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
-        // Plate number database check for uniqueness
-        Query truckCheckQuery = session.createQuery("from Truck where plate_number = :plate_number");
-        truckCheckQuery.setString("plate_number", plate_number);
-        Truck checkedTruck = (Truck) truckCheckQuery.uniqueResult();
-        session.getTransaction().commit();
-
-        if (checkedTruck != null) {
-            throw new DuplicateEntryException("Plate number is unique and this one is already present in the database",
-                    "Duplicate entry");
-        }
-
-        session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-
         Query locationQuery = session.createQuery("from Location where city = :city");
         locationQuery.setString("city", city);
         Location dbLocation = (Location) locationQuery.uniqueResult();
@@ -71,6 +58,26 @@ public class UpdateService {
         Query truckQuery = session.createQuery("from Truck where id = :id");
         truckQuery.setInteger("id", id);
         Truck truckToUpdate = (Truck) truckQuery.uniqueResult();
+
+        // if user changes truck's plate number, check if other trucks don't have it
+        if (!truckToUpdate.getPlate_number().equals(plate_number)) {
+            Query plateNumberCheckQuery = session.createQuery("from Truck where plate_number != :old_plate_number");
+            plateNumberCheckQuery.setString("old_plate_number", truckToUpdate.getPlate_number());
+            List otherTruckList = plateNumberCheckQuery.list();
+
+            if (otherTruckList != null) {
+                for (Object otherTruckObject : otherTruckList) {
+                    Truck otherTruck = (Truck) otherTruckObject;
+
+                    if (otherTruck.getPlate_number().equals(plate_number)) {
+                        session.getTransaction().commit();
+                        throw new DuplicateEntryException("Plate number is unique and this one is already in database",
+                                "Duplicate entry");
+                    }
+                }
+            }
+        }
+
         logger.info("Truck to update: " + truckToUpdate);
 
         truckToUpdate.setPlate_number(plate_number);
@@ -96,21 +103,6 @@ public class UpdateService {
     public Object updateDriver(int id, String name, String surname, String email, String password, int worked_hours,
                              String status, String city, String plate_number) throws DuplicateEntryException {
 
-        SessionFactory sessionFactory = AuthDao.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-
-        // Email database check for uniqueness
-        Query driverCheckQuery = session.createQuery("from Driver where email = :email");
-        driverCheckQuery.setString("email", email);
-        Driver checkedDriver = (Driver) driverCheckQuery.uniqueResult();
-        session.getTransaction().commit();
-
-        if (checkedDriver != null) {
-            throw new DuplicateEntryException("Email is unique and this one is already present in the database",
-                    "Duplicate entry");
-        }
-
         logger.info("ID of the driver to update: " + id);
 
         // Password encryption using MD5
@@ -130,7 +122,8 @@ public class UpdateService {
         }
 
         // DB update
-        session = sessionFactory.getCurrentSession();
+        SessionFactory sessionFactory = AuthDao.getSessionFactory();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
         Query locationQuery = session.createQuery("from Location where city = :city");
@@ -155,6 +148,27 @@ public class UpdateService {
         Query driverQuery = session.createQuery("from Driver where id = :id");
         driverQuery.setInteger("id", id);
         Driver driverToUpdate = (Driver) driverQuery.uniqueResult();
+
+
+        // if user changes driver's email, check if other drivers don't have it
+        if (!driverToUpdate.getEmail().equals(email)) {
+            Query driverEmailCheckQuery = session.createQuery("from Driver where email != :old_email");
+            driverEmailCheckQuery.setString("old_email", driverToUpdate.getEmail());
+            List otherDriverList = driverEmailCheckQuery.list();
+
+            if (otherDriverList != null) {
+                for (Object otherDriverObject : otherDriverList) {
+                    Driver otherDriver = (Driver) otherDriverObject;
+
+                    if (otherDriver.getEmail().equals(email)) {
+                        session.getTransaction().commit();
+                        throw new DuplicateEntryException("Email is unique and this one is already present in database",
+                                "Duplicate entry");
+                    }
+                }
+            }
+        }
+
         logger.info("Driver to update: " + driverToUpdate);
 
         driverToUpdate.setName(name);
