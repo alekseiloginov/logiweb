@@ -14,7 +14,7 @@ import java.util.Map;
  * Homebrew MVC Controller implementation to work with the user data.
  */
 public class UserController {
-    static Logger logger = Logger.getLogger(UserController.class);
+    private static Logger logger = Logger.getLogger(UserController.class);
     private AuthService authService;
     private RegService regService;
 

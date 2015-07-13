@@ -1,7 +1,5 @@
 package com.tsystems.javaschool.loginov.logiweb.controllers;
 
-import com.tsystems.javaschool.loginov.logiweb.services.AuthService;
-import com.tsystems.javaschool.loginov.logiweb.services.RegService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -12,7 +10,7 @@ import java.util.Map;
  * A single point of access to get any controller and returns a corresponding view as a string.
  */
 public class ControllerLocator {
-    static Logger logger = Logger.getLogger(ControllerLocator.class);
+    private static Logger logger = Logger.getLogger(ControllerLocator.class);
 
     public static final ControllerLocator INSTANCE = new ControllerLocator();
 

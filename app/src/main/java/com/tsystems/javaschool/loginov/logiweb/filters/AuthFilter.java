@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 @WebFilter("/*")
 public class AuthFilter implements Filter {
-    private Logger logger = Logger.getLogger(AuthFilter.class);
+    private static Logger logger = Logger.getLogger(AuthFilter.class);
 
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("AuthFilter initialized");

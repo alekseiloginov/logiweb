@@ -12,7 +12,7 @@ import java.util.Set;
  * Homebrew MVC Controller implementation to work with the waypoint data.
  */
 public class WaypointController {
-    static Logger logger = Logger.getLogger(WaypointController.class);
+    private static Logger logger = Logger.getLogger(WaypointController.class);
     private ListService listService;
     private SaveService saveService;
 //    private UpdateService updateService;

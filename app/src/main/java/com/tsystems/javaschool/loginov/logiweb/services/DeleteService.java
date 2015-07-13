@@ -10,7 +10,7 @@ import org.hibernate.SessionFactory;
  * Deletes an item (truck, driver, orders etc.) from the database.
  */
 public class DeleteService {
-    static Logger logger = Logger.getLogger(DeleteService.class);
+    private static Logger logger = Logger.getLogger(DeleteService.class);
 
     public static final DeleteService INSTANCE = new DeleteService();
 

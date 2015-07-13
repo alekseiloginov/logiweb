@@ -13,13 +13,12 @@ import org.hibernate.SessionFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Updates an item (truck, driver, order etc.) in the database.
  */
 public class UpdateService {
-    static Logger logger = Logger.getLogger(UpdateService.class);
+    private static Logger logger = Logger.getLogger(UpdateService.class);
 
     public static final UpdateService INSTANCE = new UpdateService();
 

@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * Fetches valid options to work with from the database.
  */
 public class OptionService {
-    static Logger logger = Logger.getLogger(OptionService.class);
+    private static Logger logger = Logger.getLogger(OptionService.class);
 
     public static final OptionService INSTANCE = new OptionService();
 

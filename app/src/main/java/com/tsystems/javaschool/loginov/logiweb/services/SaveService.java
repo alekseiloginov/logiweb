@@ -23,7 +23,7 @@ public class SaveService {
 //        DriverStatusChange driverStatusChange = new DriverStatusChange("free", driver);
 //        session.save(driverStatusChange);
 
-    static Logger logger = Logger.getLogger(SaveService.class);
+    private static Logger logger = Logger.getLogger(SaveService.class);
 
     public static final SaveService INSTANCE = new SaveService();
 

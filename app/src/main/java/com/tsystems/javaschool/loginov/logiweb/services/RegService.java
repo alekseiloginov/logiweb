@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
  * Validates user input to sign-up.
  */
 public class RegService {
-    static Logger logger = Logger.getLogger(RegService.class);
+    private static Logger logger = Logger.getLogger(RegService.class);
 
     public static final RegService INSTANCE = new RegService();
 

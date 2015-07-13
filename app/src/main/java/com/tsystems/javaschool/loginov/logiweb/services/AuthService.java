@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
  * Validates user input to log in.
  */
 public class AuthService {
-    static Logger logger = Logger.getLogger(AuthService.class);
+    private static Logger logger = Logger.getLogger(AuthService.class);
 
     public static final AuthService INSTANCE = new AuthService();
 

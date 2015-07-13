@@ -13,7 +13,7 @@ import java.util.Map;
  * Homebrew MVC Controller implementation to work with the truck data.
  */
 public class TruckController {
-    static Logger logger = Logger.getLogger(TruckController.class);
+    private static Logger logger = Logger.getLogger(TruckController.class);
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;

@@ -14,6 +14,8 @@ import java.util.Properties;
  */
 public class AuthDao {
 
+    private AuthDao() {}
+
     private static SessionFactory sessionFactory;
 
     /**

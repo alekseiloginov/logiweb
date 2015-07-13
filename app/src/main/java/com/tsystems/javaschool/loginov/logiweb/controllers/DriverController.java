@@ -15,7 +15,7 @@ import java.util.Set;
  * Homebrew MVC Controller implementation to work with the driver data.
  */
 public class DriverController {
-    static Logger logger = Logger.getLogger(DriverController.class);
+    private static Logger logger = Logger.getLogger(DriverController.class);
     private ListService listService;
     private SaveService saveService;
     private UpdateService updateService;

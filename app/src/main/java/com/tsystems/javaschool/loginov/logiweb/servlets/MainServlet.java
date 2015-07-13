@@ -20,8 +20,8 @@ import java.util.Map;
 @WebServlet(name = "MainServlet", urlPatterns = {"*.do", "*.go"})
 public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    Logger logger = Logger.getLogger(MainServlet.class);
-    ControllerLocator controllerLocator = ControllerLocator.getInstance();
+    private static Logger logger = Logger.getLogger(MainServlet.class);
+    private ControllerLocator controllerLocator = ControllerLocator.getInstance();
 
     /**
      * Handles POST HTTP methods.
