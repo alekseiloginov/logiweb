@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -281,7 +282,7 @@ public class OptionService {
         session.getTransaction().commit();
 
         // add all city waypoints to the validCityWaypointSet
-        Set<Waypoint> validCityWaypointSet = new HashSet<>();
+        Set<Waypoint> validCityWaypointSet = Collections.newSetFromMap(new ConcurrentHashMap<Waypoint, Boolean>());
         Waypoint cityWaypointOption;
         Order order;
 
